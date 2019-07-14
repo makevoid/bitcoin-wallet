@@ -1,3 +1,9 @@
+/* reset */
+
+/* html, html > body * {
+  box-sizing: border-box;
+} */
+
 /* utils */
 
 .rel {
@@ -11,8 +17,7 @@
   /* margin: 0 auto; */
 }
 
-
-.t-center {
+.t-center, .ta-center {
   text-align: center;
 }
 
@@ -34,7 +39,6 @@
 .s90{ height: 90px; }
 .s100{ height: 100px; }
 
-
 .nomargin { margin: 0; }
 .nopad { padding: 0; }
 
@@ -43,7 +47,6 @@
 .w-full {width: 100%;}
 
 .text-grey, .text-grey > input { color: #BBB; }
-
 
 /* colors */
 
@@ -57,18 +60,23 @@ a {
   width: 28%;
 }
 
-
 .ons-tabbar .tabbar__icon {
 
 }
 
 .ons-tabbar#main-tabbar .tabbar__label {
   line-height: 6;
-
 }
 
 ons-icon .ion-md-arrow-down {
   display: none;
+}
+
+/* toasts copypaste fix */
+
+.modals, .toast,  {
+  user-select: all;
+
 }
 
 /* screens - transactions */
@@ -80,4 +88,42 @@ ons-icon .ion-md-arrow-down {
 .transactions.tx-list span.tx {
   margin-left: 5px;
   font-size: 0.8em;
+}
+
+centered padded button button--large {
+
+}
+
+/* todo: refactor */
+
+.padded {
+  padding-top: 10px;
+  padding-bottom: 8px;
+  /* width: 80%; */
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.btn-width-150 {
+  width: 150px;
+}
+
+.bgtheme {
+  background: #efeff4;
+}
+
+.wfull {
+  width: 100%;
+}
+
+/* buttons */
+
+ons-col.btn, .btn {
+  /* placeholder */
+}
+
+ons-col.btn.btn-info, .btn.btn-info {
+  background: #9ae;
 }

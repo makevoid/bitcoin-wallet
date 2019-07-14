@@ -4,6 +4,7 @@
 
 cordova platform add android
 cordova platform add browser
+cordova prepare
 
 npm install
 

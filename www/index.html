@@ -11,10 +11,10 @@
 </style>
 <link href='css/vendor/ionic-icons.css' rel='stylesheet'>
 <link href='css/vendor/onsen.css' rel='stylesheet'>
-<link href='css/vendor/onsen-comp.css' rel='stylesheet'>
-<link href='css/vendor/onsen-theme.css' rel='stylesheet'>
+<link href='css/vendor/theme/onsen-css-components.min.css' rel='stylesheet'>
+<link href='css/vendor/theme/theme.css' rel='stylesheet'>
 <link href='css/index.css' rel='stylesheet' type='text/css'>
-<title><3itcoin LN wallet</title>
+<title>xDAI wallet</title>
 
 <script>console.warn("Switch to Onsen minified!")</script>
 <script src='js/vendor/onsenui-dev.js'></script>
@@ -22,7 +22,7 @@
 <body>
 <div class='app'>
 <template id='tabbar.html'>
-<ons-page>
+<ons-page class='tpl-tabbar'>
 <ons-tabbar id='main-tabbar' position='bottom'>
 <ons-tab active class='active receive' icon='ion-md-arrow-down' label='Receive' page='receive.html'></ons-tab>
 <ons-tab class='send' icon='ion-md-arrow-up' label='Send' page='send.html'></ons-tab>
@@ -32,49 +32,56 @@
 </ons-page>
 </template>
 <template id='send.html'>
-<ons-page>
+<ons-page class='tpl-send'>
 <ons-toolbar>
 <div class='center'>Send</div>
 <div class='right'>
 <ons-toolbar-button>
-<a class='refresh-btn' onclick='fn.refreshPage()'>
-<ons-icon icon='ion-md-settings'></ons-icon>
+<a class='btn-settings button-settings settings-button'>
+<ons-icon class='icon-main-right icon-settings' icon='ion-md-settings'></ons-icon>
 </a>
 </ons-toolbar-button>
 </div>
 </ons-toolbar>
 <div class='centered'>
 <div class='s30'></div>
-<ons-button>
-<i class='ion-md-qr-scanner'></i>
+<ons-row>
+<ons-col></ons-col>
+<ons-col>
+<ons-button class='btn-width-150 btn btn-info btn-scan button-scan'>
+<i class='ion-md-qr-scanner icons-scan'></i>
 &nbsp;
 Scan QR
 </ons-button>
-<div class='s10'></div>
-<ons-button>
-<i class='ion-md-clipboard'></i>
+</ons-col>
+<ons-col></ons-col>
+<ons-col>
+<ons-button class='btn-width-150 btn btn-info btn-paste button-paste'>
+<i class='ion-md-clipboard icons-paste'></i>
 &nbsp;
 Paste
 </ons-button>
-<div class='s20'></div>
-<ons-list modifier='inset'>
+</ons-col>
+<ons-col></ons-col>
+</ons-row>
+<div class='s80'></div>
+<ons-list class='send-form'>
 <ons-list-item>
 <div class='s10'></div>
-<p>
-<ons-input float='' modifier='underbar' placeholder='Recipient' type='text'></ons-input>
+<p class='wfull'>
+<ons-input class='recipient-address wfull' float='' modifier='underbar' placeholder='Recipient' type='text'></ons-input>
 </p>
 </ons-list-item>
-<ons-list-header class='t-center'></ons-list-header>
 <ons-list-item>
 <div class='s30'></div>
-<p>
-<ons-input float='' modifier='underbar' placeholder='Amount (bits)' type='text'></ons-input>
+<p class='wfull'>
+<ons-input class='send-amount wfull' float='' modifier='underbar' placeholder='Amount (USD cents)' type='text'></ons-input>
 </p>
 </ons-list-item>
 <ons-list-item>
 <div class='s10'></div>
 <p class='w-full t-center'>
-<ons-button class='centered' modifier='large' onclick='fn.walletSend()'>Send</ons-button>
+<ons-button class='send-button centered padded' modifier='large'>Send</ons-button>
 </p>
 </ons-list-item>
 </ons-list>
@@ -83,59 +90,71 @@ Paste
 </ons-page>
 </template>
 <template id='receive.html'>
-<ons-page>
+<ons-page class='tpl-receive'>
 <ons-toolbar>
 <div class='center'>Receive</div>
 <div class='right'>
 <ons-toolbar-button>
-<a class='refresh-btn' onclick='fn.refreshPage()'>
-<ons-icon icon='ion-md-settings'></ons-icon>
+<!-- TODO: bind click evt -->
+<a class='btn-settings button-settings settings-button'>
+<ons-icon class='icon-main-right icon-settings' icon='ion-md-settings'></ons-icon>
 </a>
 </ons-toolbar-button>
 </div>
 </ons-toolbar>
 <div class='s50'></div>
-<div class='centered'>
+<div class='receive-screen centered'>
 <ons-list>
-<ons-list-header class='centered nopad'>Address</ons-list-header>
+<ons-list-header class='centered nopad bgtheme'>Address</ons-list-header>
 </ons-list>
 <div class='qr'>
 <img class='rel' src='assets/img/qr_sample.png'>
 </div>
-<div class='s20'></div>
+<div class='s30'></div>
 <ons-list class='w-inner centered'>
 <ons-list-item class='input-items'>
 <div class='right'>
 <a href='#'>
-<ons-icon class='list-item__icon' icon='ion-md-copy'></ons-icon>
+<ons-icon class='list-item__icon icon-copy btn btn-copy button-copy' icon='ion-md-copy'></ons-icon>
 </a>
 </div>
 <label class='centered'>
-<ons-input class='nomargin w-full centered text-grey' id='address-input' readonly value='3N3RXbpGHn6bfvcE2nEYbvGHVPorVWgkeQ'></ons-input>
+<ons-input class='receive-address-input nomargin w-full centered text-grey' readonly value='...'></ons-input>
 </label>
 </ons-list-item>
 </ons-list>
-<div class='s20'></div>
-<ons-list>
-<ons-list-header class='centered nopad'>Balance</ons-list-header>
-<ons-list-header class='centered nopad'>1023 bits</ons-list-header>
-<ons-list-header class='centered nopad'>11.40 USD</ons-list-header>
+<div class='s60'></div>
+<ons-list class='balances'>
+<!-- Balance -->
+<ons-list-header class='centered nopad bgtheme'>
+BALANCE
+</ons-list-header>
+<ons-list-header class='centered nopad balance bgtheme'>
+<span class='bal'>....</span>
+USD cents
+</ons-list-header>
+<div class='centered bgtheme'>
+<a class='refresh-balance-btn'>
+<ons-icon icon='ion-md-refresh'></ons-icon>
+</a>
+</div>
 </ons-list>
 </div>
 <script>
-console.log("aaa")
+<!-- / TODO if page == receive -->
+<!-- / console.log("receive page loaded") -->
 </script>
 
 </ons-page>
 </template>
 <template id='transactions.html'>
-<ons-page>
+<ons-page class='tpl-transactions'>
 <ons-toolbar>
 <div class='center'>Transactions</div>
 <div class='right'>
 <ons-toolbar-button>
-<a class='refresh-btn' onclick='fn.refreshPage()'>
-<ons-icon icon='ion-md-settings'></ons-icon>
+<a class='btn-settings button-settings settings-button'>
+<ons-icon class='icon-main-right icon-settings' icon='ion-md-settings'></ons-icon>
 </a>
 </ons-toolbar-button>
 </div>
@@ -148,8 +167,8 @@ console.log("aaa")
 <ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
 </div>
 <div class='center'>
-Receiving 10.000 bits (0 conf.) from '3Me2ZD....v9P'
-<span class='tx'>tx: a1f2b1...</span>
+Receiving 10 USD cents (0 conf.) from '0xadd4344....b31'
+<span class='tx'>tx: 0xa1f2b1...</span>
 </div>
 </ons-list-item>
 <div class='s3'></div>
@@ -159,8 +178,8 @@ Receiving 10.000 bits (0 conf.) from '3Me2ZD....v9P'
 <ons-icon class='list-item__icon' icon='ion-md-arrow-up'></ons-icon>
 </div>
 <div class='center'>
-Sent 3.000 bits to '3FhvRV....NDe'
-<span class='tx'>tx: b23dc2...</span>
+Sent 3.123 USD cents to '0xadd43442....a23'
+<span class='tx'>tx: 0xb23dc2...</span>
 </div>
 </ons-list-item>
 <div class='s3'></div>
@@ -170,55 +189,28 @@ Sent 3.000 bits to '3FhvRV....NDe'
 <ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
 </div>
 <div class='center'>
-Received 26.000 bits from '386SqU....BJV'
-<span class='tx'>tx: 45fe31...</span>
+Received 26.2 USD cents from '0xadd43443....a21'
+<span class='tx'>tx: 0x45fe31...</span>
 </div>
 </ons-list-item>
 </ons-list>
-</div>
-
-</ons-page>
-</template>
-<template id='settings.html'>
-<ons-page>
-<ons-toolbar>
-<div class='center'>Settings</div>
-<div class='right'>
-<ons-toolbar-button>
-<a class='refresh-btn' onclick='fn.refreshPage()'>
-<ons-icon icon='ion-md-settings'></ons-icon>
-</a>
-</ons-toolbar-button>
-</div>
-</ons-toolbar>
-<div class='centered'>
-<div class='s30'></div>
-<ons-button>
-<i class='ion-md-qr-scanner'></i>
-&nbsp;
-Reload
-</ons-button>
 </div>
 
 </ons-page>
 </template>
 <ons-splitter>
-<ons-splitter-side collapse id='splitter' side='left' swipeable width='220px'>
-<ons-page>
-<ons-list>
-<ons-list-item onclick='fn.load(&#39;tabbar.html&#39;)' tappable>
-Home
-</ons-list-item>
-<ons-list-item onclick='fn.load(&#39;settings.html&#39;)' tappable>
-Settings
-</ons-list-item>
-</ons-list>
-</ons-page>
-</ons-splitter-side>
 <ons-splitter-content id='content' page='tabbar.html'></ons-splitter-content>
 </ons-splitter>
 </div>
 <script src='cordova.js' type='text/javascript'></script>
+<script src='js/lib/eth-keychain/bundle-lib.js' type='text/javascript'></script>
+<!-- / dev version imports - TODO: remove for open beta release -->
+<script src='js/lib/bind-dev-btns.js' type='text/javascript'></script>
+<script src='js/utils.js' type='text/javascript'></script>
+<script src='js/helpers.js' type='text/javascript'></script>
+<script src='js/actions.js' type='text/javascript'></script>
+<script src='js/view.js' type='text/javascript'></script>
+<script src='js/app.js' type='text/javascript'></script>
 <script src='js/index.js' type='text/javascript'></script>
 </body>
 </html>

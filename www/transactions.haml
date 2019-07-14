@@ -2,8 +2,8 @@
   .center Transactions
   .right
     %ons-toolbar-button
-      %a.refresh-btn{ onclick: "fn.refreshPage()" }
-        %ons-icon{ icon: "ion-md-settings" }
+      %a.btn-settings.button-settings.settings-button
+        %ons-icon.icon-main-right.icon-settings{ icon: "ion-md-settings" }
 
 .centered
 
@@ -13,8 +13,8 @@
       .left
         %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
       .center
-        Receiving 10.000 bits (0 conf.) from '3Me2ZD....v9P' 
-        %span.tx tx: a1f2b1...
+        Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
+        %span.tx tx: 0xa1f2b1...
 
     .s3
     %ons-list-header Yesterday
@@ -22,8 +22,8 @@
       .left
         %ons-icon.list-item__icon{ icon: "ion-md-arrow-up" }
       .center
-        Sent 3.000 bits to '3FhvRV....NDe'
-        %span.tx tx: b23dc2...
+        Sent 3.123 #{Conf.currency} to '0xadd43442....a23'
+        %span.tx tx: 0xb23dc2...
 
     .s3
     %ons-list-header 26/06/19
@@ -31,5 +31,5 @@
       .left
         %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
       .center
-        Received 26.000 bits from '386SqU....BJV'
-        %span.tx tx: 45fe31...
+        Received 26.2 #{Conf.currency} from '0xadd43443....a21'
+        %span.tx tx: 0x45fe31...

@@ -2,37 +2,44 @@
   .center Send
   .right
     %ons-toolbar-button
-      %a.refresh-btn{ onclick: "fn.refreshPage()" }
-        %ons-icon{ icon: "ion-md-settings" }
+      %a.btn-settings.button-settings.settings-button
+        %ons-icon.icon-main-right.icon-settings{ icon: "ion-md-settings" }
 
 .centered
   .s30
 
-  %ons-button
-    %i.ion-md-qr-scanner
-    \&nbsp;
-    Scan QR
-  .s10
-  %ons-button
-    %i.ion-md-clipboard
-    \&nbsp;
-    Paste
+  %ons-row
+    %ons-col
+    %ons-col
+      %ons-button.btn-width-150.btn.btn-info.btn-scan.button-scan
+        %i.ion-md-qr-scanner.icons-scan
+        \&nbsp;
+        Scan QR
+    %ons-col
+    %ons-col
+      %ons-button.btn-width-150.btn.btn-info.btn-paste.button-paste
+        %i.ion-md-clipboard.icons-paste
+        \&nbsp;
+        Paste
+    %ons-col
 
-  .s20
-  %ons-list{ modifier: "inset" }
+
+  .s80
+  %ons-list.send-form
     %ons-list-item
       .s10
-      %p
-        %ons-input{ float: "",  modifier: "underbar",  placeholder: "Recipient",  type: "text" }
-    %ons-list-header.t-center
+      %p.wfull
+        %ons-input.recipient-address.wfull{ float: "",  modifier: "underbar",  placeholder: "Recipient",  type: "text" }
     %ons-list-item
       .s30
-      %p
-        %ons-input{ float: "",  modifier: "underbar",  placeholder: "Amount (bits)",  type: "text" }
+      %p.wfull
+        %ons-input.send-amount.wfull{ float: "",  modifier: "underbar",  placeholder: "Amount (#{Conf.currency})",  type: "text" }
     %ons-list-item
       .s10
       %p.w-full.t-center
-        %ons-button.centered{ modifier: "large", onclick: "fn.walletSend()" } Send
+        -# .send-form .send-button
+        %ons-button.send-button.centered.padded{ modifier: "large" } Send
+        -# unsure to add the .fw-bold or not to the button (minimalistic/cool-ui vs usability consideration)
 
 -# %ons-fab{ position: "bottom right" }
 -#   %ons-icon{ icon: "ion-md-send" }

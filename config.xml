@@ -2,10 +2,10 @@
 <widget id="com.makevoid.bitcoinwallet" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>&lt;3itcoin Wallet</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        LN Wallet - send <3, send BTC
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="makevoid@gmail.com" href="http://makevoid.com">
+        Francesco 'makevoid' Canessa
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -15,14 +15,19 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="http://ln.mkv.run:3000/*" />
+    <allow-navigation href="http://ln.mkv.run:3000/" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <!-- TODO: recheck this config -->
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <exclude-files pattern="www/js/vendor/onsenui-dev.css" />
     <engine name="android" spec="^8.0.0" />
     <engine name="browser" spec="^6.0.0" />
     <plugin name="cordova-plugin-whitelist" spec="1" />

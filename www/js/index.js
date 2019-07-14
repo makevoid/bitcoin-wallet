@@ -1,110 +1,31 @@
-const d = document
+// App = require('./app')
+// bindNotEnabledButtons = require('./tmp/bind-unused-btns')
 
-const app = {
-    // Application Constructor
-    initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false)
-    },
-
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready')
-    },
-
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        const parentElement = document.getElementById(id)
-        // const listeningElement = parentElement.querySelector('.listening')
-        // const receivedElement = parentElement.querySelector('.received')
-
-        // listeningElement.setAttribute('style', 'display:none')
-        // receivedElement.setAttribute('style', 'display:block')
-        //
-        // console.log('Received Event: ' + id)
-
-        console.log("ready")
-        bindButtons()
-    }
+const runApp = () => {
+  const app = new App()
+  window.app = app
+  window.web3utils = app.keychain.web3.utils
 }
 
+let receiveLoaded = false
+let sendLoaded    = false
+let appRunning    = false
 
-
-const bindButtons = () => {
-  // d.querySelector(".refresh-btn").addEventListener("click", refreshPage)
-}
-
-
-app.initialize()
-
-
-//  --------
-
-const contentLoadFailed = (err) => {
-  console.error("Content load failed")
-  console.log("Original error:")
-  console.log(err)
-}
-
-const main = {}
-
-window.fn = main
-
-main.defaultPage = "receive.html"
-main.currentPage = main.defaultPage
-
-main.open = () => {
-  const splitter = d.querySelector('#splitter')
-  splitter.open()
-}
-
-main.setCurrentPage = (page) => (
-  () => {
-    main.currentPage = page
+const pageLoaded = (event) => {
+  const page = event.target;
+  if (page.classList.contains('tpl-receive')) receiveLoaded = true
+  if (page.classList.contains('tpl-send')) sendLoaded = true
+  const pagesLoaded = receiveLoaded && sendLoaded
+  if (pagesLoaded && !appRunning) {
+    appRunning = true
+    runApp()
   }
-)
-
-main.load = (page) => {
-  const content  = d.querySelector('#content')
-  const splitter = d.querySelector('#splitter')
-  content.load(page)
-    .then(splitter.close.bind(splitter))
-    .then(bindButtons)
-    .then(main.setCurrentPage(page))
-    .catch(contentLoadFailed)
 }
 
-main.refreshPage = () => {
-  console.log(`refreshing ${main.currentPage}`)
-  main.load(main.currentPage)
+const main = () => {
+  // ons.bootstrap() // TODO: delete line? not needed or not loaded?
+  document.addEventListener('init', pageLoaded)
+  // window.addEventListener('DOMContentLoaded', runApp)
 }
 
-// TODO: move to unobtrusive binding
-// page.querySelector('[component="button/save-task"]').onclick = function() {
-
-
-//
-// window.fn = {}
-//
-// window.fn.toggleMenu = () => {
-//   document.getElementById('appSplitter').right.toggle()
-// }
-//
-// window.fn.loadView = (index) => {
-//   document.getElementById('appTabbar').setActiveTab(index)
-//   document.getElementById('sidemenu').close()
-// }
-//
-// window.fn.loadLink = (url) => {
-//   window.open(url, '_blank')
-// }
-//
-// window.fn.pushPage = (page, anim) => {
-//   if (anim) {
-//     document.getElementById('appNavigator').pushPage(page.id, { data: { title: page.title }, animation: anim })
-//   } else {
-//     document.getElementById('appNavigator').pushPage(page.id, { data: { title: page.title } })
-//   }
-// }
+main()

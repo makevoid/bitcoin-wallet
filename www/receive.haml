@@ -2,35 +2,46 @@
   .center Receive
   .right
     %ons-toolbar-button
-      %a.refresh-btn{ onclick: "fn.refreshPage()" }
-        %ons-icon{ icon: "ion-md-settings" }
+      / TODO: bind click evt
+      %a.btn-settings.button-settings.settings-button
+        %ons-icon.icon-main-right.icon-settings{ icon: "ion-md-settings" }
 
 .s50
-.centered
+.receive-screen.centered
 
   %ons-list
-    %ons-list-header.centered.nopad Address
+    %ons-list-header.centered.nopad.bgtheme Address
   -# %p.centered Address
 
   .qr
     %img.rel{ src: "assets/img/qr_sample.png" }
 
-  .s20
+  .s30
 
   %ons-list.w-inner.centered
     %ons-list-item.input-items
       .right
         %a{ href: "#" }
-          %ons-icon.list-item__icon{ icon: "ion-md-copy"}
+          %ons-icon.list-item__icon.icon-copy.btn.btn-copy.button-copy{ icon: "ion-md-copy"}
       %label.centered
-        %ons-input#address-input.nomargin.w-full.centered.text-grey{ readonly: true, value: "3N3RXbpGHn6bfvcE2nEYbvGHVPorVWgkeQ" }
+        -# .receive-screen .receive-address-input
+        %ons-input.receive-address-input.nomargin.w-full.centered.text-grey{ readonly: true, value: "..." }
 
-  .s20
+  .s60
 
-  %ons-list
-    %ons-list-header.centered.nopad Balance
-    %ons-list-header.centered.nopad 1023 bits
-    %ons-list-header.centered.nopad 11.40 USD
+  %ons-list.balances
+    / Balance
+    %ons-list-header.centered.nopad.bgtheme
+      BALANCE
+    %ons-list-header.centered.nopad.balance.bgtheme
+      -# selector: .balances > .balance > .bal
+      %span.bal ....
+      #{Conf.currency}
+
+    .centered.bgtheme
+      %a.refresh-balance-btn
+        %ons-icon{ icon: "ion-md-refresh" }
 
 %script
-  console.log("aaa")
+  // TODO if page == receive
+  // console.log("receive page loaded")
