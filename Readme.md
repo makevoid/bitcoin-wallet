@@ -18,7 +18,7 @@ It should be easy (now that I have a LN [lnd] node fully synced and working to t
 
 It would be nice to have one wallet for each of this options, I should complete #1 and #3 thou before starting all 6+ (I haven't listed doge but it's too :much-wow: to not attempt it :D).
 
-- 1 ) BTC - Lightning (L2) - PAUSED - code is:
+- 1 ) BTC - Lightning (L2) - STARTED - UI code taken from https://github.com/xdai-wallet (cordova, android+browser) - https://github.com/bitcoin-keychain (which uses https://github.com/makevoid/eth-keychain)
 - 2 ) BTC
 
 <--- Development is at this stage (n3)
