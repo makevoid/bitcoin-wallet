@@ -5,7 +5,7 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
-    "browser": "phonegap serve --autoreload",
+    "browser": "phonegap serve --port 8000 --autoreload ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

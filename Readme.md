@@ -44,7 +44,7 @@ LN GRPC full node backend at the moment, even if there are 3 options:
 - 2) fully hosted using pk under https to auth
 - 3) hybrid (neutrino? will have to investigate)
 
-### xDAI
+### <3itcoin
 
 xDai ETH backed, this is nice as it's a stablecoin, but of course
 
