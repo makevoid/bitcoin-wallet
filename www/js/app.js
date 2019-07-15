@@ -1,9 +1,22 @@
+class LNKeychain { /* reserved */}
+
+// const BTCKeychian = require('@makevoid/bitcoin-keychain')
+
+class Keychain extends LNKeychain {
+  netInfo() {
+    return {}
+  }
+
+  web3() {
+    return { utils: false }
+  }
+}
+
 class App {
 
   constructor() {
     this.keychain   = new NullKeychain()
     this.balance    = new NullBalance()
-    this.balanceUsd = new NullBalance()
     this.rate       = new NullRate()
     this.events     = new NullEventEmitter()
     this.addEventsEmitter()
@@ -66,10 +79,9 @@ class App {
   async updateBalance() {
     // TODO: port back to keychain
     // TODO: use a balance-only function
-    const { balanceEth } = await this.keychain.netInfo()
+    const { balance } = await this.keychain.netInfo()
     // TODO: include rate into keychain
-    this.balance = balanceEth
-    this.updateBalanceUsd()
+    this.balance = balance
     // TODO: load cached value, load FX value from network later (10 seconds, or if everything else is loaded)
     await this.loadFX()
   }
@@ -77,16 +89,10 @@ class App {
   async loadFX() {
     const price = await this.getDaiPrice()
     this.rate = price
-    this.updateBalanceUsd()
     console.log("Balance USD:", this.balanceUsd)
-    console.log("Balance USD cents:", Math.round(this.balanceUsd * 100 * 100) / 100)
+    console.log("Balance satoshis:", Math.round(this.balanceUsd * 100 * 100) / 100)
     const data = { balanceUsd: this.balanceUsd }
     this.emit({ event: "balance", data: data })
-  }
-
-  updateBalanceUsd() {
-    if (this.rate instanceof NullRate) return
-    this.balanceUsd = this.rate * this.balance
   }
 
   async getDaiPrice() {

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@radar/lnrpc": "^0.7.0-beta",
     "bip39": "^3.0.2",
     "ethereumjs-wallet": "^0.6.3",
     "hyperhtml": "^2.29.0",

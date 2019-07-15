@@ -1,5 +1,5 @@
 Conf = {}
 
 def Conf.currency
-  "USD cents"
+  "sats"
 end

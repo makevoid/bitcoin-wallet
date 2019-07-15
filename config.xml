@@ -2,7 +2,7 @@
 <widget id="com.makevoid.bitcoinwallet" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>&lt;3itcoin Wallet</name>
     <description>
-        LN Wallet - send <3, send BTC
+        LN Wallet - send &lt;3, send BTC!
     </description>
     <author email="makevoid@gmail.com" href="http://makevoid.com">
         Francesco 'makevoid' Canessa
@@ -20,7 +20,6 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <!-- TODO: recheck this config -->
             <application android:usesCleartextTraffic="true" />
         </edit-config>
     </platform>
