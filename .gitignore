@@ -1,4 +1,7 @@
+.DS_Store
 /platforms
 node_modules
 /plugins
 www/config/secrets
+www/js/lib/btc-ln-keychain/bundle.js
+www/index.html

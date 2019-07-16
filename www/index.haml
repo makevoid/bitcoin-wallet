@@ -25,11 +25,17 @@
 
     %script{ src: "cordova.js",  type: "text/javascript" }
     -# %script{ src: "js/lib/eth-keychain/bundle-lib.js",  type: "text/javascript" }
+    %script{ src: "js/vendor/axios.js", type: "text/javascript" }
 
     // dev version imports - TODO: remove for open beta release
     %script{ src: "js/lib/bind-dev-btns.js", type: "text/javascript" }
 
+    %script
+      :plain
+        const tlsCert     = `#{File.read("./config/secrets/tls.cert")}`
+        const lnMacaroon  = "#{File.read("./config/secrets/admin.macaroon").unpack('H*').first}"
 
+    %script{ src: "js/lib/btc-ln-keychain/bundle.js", type: "text/javascript" }
     %script{ src: "js/utils.js", type: "text/javascript" }
     %script{ src: "js/helpers.js", type: "text/javascript" }
     %script{ src: "js/actions.js", type: "text/javascript" }
