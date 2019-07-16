@@ -4,15 +4,29 @@ const createLnRpc = require('@radar/lnrpc')
 
 ;(async function() {
 
-  console.log(createLnRpc)
+  // ssh -N -L 10009:localhost:10009 root@54.246.206.3
 
   const lnRpcClient = await createLnRpc({
-    server:    '54.246.206.3:10009',
-    //server:       'localhost:10009',
+    // server:    '54.246.206.3:10009',
+    server:       'localhost:10009',
     tls:          './config/secrets/tls.cert',
     macaroonPath: './config/secrets/admin.macaroon',
     // macaroonPath: '../config/secrets/MAC-KEY.macaroon',
   })
+  console.log(lnRpcClient)
+
+
+  try {
+    const channels = await lnRpcClient.listChannels()
+    console.log("channels:", channels)
+  } catch (err) {
+    console.error(err)
+  }
+
+
+
+  process.exit()
+
 
   try {
     const info = await lnRpcClient.getInfo()
@@ -20,6 +34,8 @@ const createLnRpc = require('@radar/lnrpc')
   } catch (err) {
     console.error(err)
   }
+
+  // process.exit()
 
   try {
     const netInfo = await lnRpcClient.getNetworkInfo()
