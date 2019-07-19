@@ -9,7 +9,7 @@ class App {
     this.view = this.initView()
     this.initKeychain()
   }
-  
+
   initView() {
     if (this.view) return this.view
     const view = new View()

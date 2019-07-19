@@ -2,32 +2,37 @@ class LNKeychain { /* reserved */}
 
 // const BTCKeychian = require('@makevoid/bitcoin-keychain')
 
-const createLnRpc = require('@radar/lnrpc')
+const get = async (command) => {
+  const resp = await lnReq.get(`/v1/${command}`)
+  return resp.data
+}
 
-class NullLNRPC {}
-
+const getInfo = async (command) => {
+  const resp = await lnReq.get(`/v1/${command}`)
+  return resp.data
+}
 
 class Keychain extends LNKeychain {
   constructor() {
-    this.ln       = new NullLNRPC()
+    super()
     this.channels = []
   }
 
   async initLN() {
-    this.ln = await createLnRpc({
-      // server:    '54.246.206.3:10009',
-      server:       'localhost:10009',
-      tls:          './config/secrets/tls.cert',
-      macaroonPath: './config/secrets/admin.macaroon',
-      // macaroonPath: '../config/secrets/MAC-KEY.macaroon',
-    })
+    const info = await get("getinfo")
+    console.log("info:", info, "\n")
+  }
+
+  async listChannels() {
+    const channels = await get("channels")
+    console.log("channels:", channels, "\n")
+    return channels
   }
 
   async channels() {
     try {
-      const channels  = await this.ln.listChannels()
+      const channels  = await this.listChannels()
       this.channels   = channels
-      console.log("channels:", channels)
     } catch (err) {
       console.error(err)
     }

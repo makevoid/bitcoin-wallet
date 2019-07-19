@@ -1,4 +1,3 @@
-const fs = require('fs')
 const https = require('https')
 const axios = require('axios')
 const cert      = tlsCert
@@ -9,23 +8,22 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 })
 
-const net = axios.create({
+const lnReq = axios.create({
   baseURL: 'https://54.246.206.3:8080',
   timeout: 1000,
   headers: {
     'Grpc-Metadata-macaroon': macaroon,
   },
-  // json: true,
   httpsAgent: httpsAgent,
 });
 
 const get = async (command) => {
-  const resp = await net.get(`/v1/${command}`)
+  const resp = await lnReq.get(`/v1/${command}`)
   return resp.data
 }
 
 const getInfo = async (command) => {
-  const resp = await net.get(`/v1/${command}`)
+  const resp = await lnReq.get(`/v1/${command}`)
   return resp.data
 }
 
