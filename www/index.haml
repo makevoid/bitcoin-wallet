@@ -32,7 +32,7 @@
 
     %script
       :plain
-        const tlsCert     = `#{File.read("./config/secrets/tls.cert")}`
+        const tlsCert     = `#{File.read("./config/secrets/tls.cert").strip}`
         const lnMacaroon  = "#{File.read("./config/secrets/admin.macaroon").unpack('H*').first}"
 
     %script{ src: "js/lib/btc-ln-keychain/bundle.js", type: "text/javascript" }

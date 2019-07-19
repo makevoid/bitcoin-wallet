@@ -74,7 +74,7 @@ class App {
   }
 
   async loadFX() {
-    const price = await this.getDaiPrice()
+    const price = await this.getBTCFx()
     this.rate = price
     console.log("Balance USD:", this.balanceUsd)
     console.log("Balance satoshis:", Math.round(this.balanceUsd * 100 * 100) / 100)
@@ -82,11 +82,11 @@ class App {
     this.emit({ event: "balance", data: data })
   }
 
-  async getDaiPrice() {
-    let resp = await fetch("https://min-api.cryptocompare.com/data/price?fsym=DAI&tsyms=USD")
+  async getBTCFx() {
+    let resp = await fetch("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD")
     resp = await resp.json()
     resp = resp.USD
-    console.log("DAIUSD rate fetched:", resp)
+    console.log("BTCUSD rate fetched:", resp)
     return resp
   }
 
