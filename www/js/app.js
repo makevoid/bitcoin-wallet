@@ -58,6 +58,12 @@ class App {
         console.error(err)
       }
 
+      try {
+        await keychain.testSendSimple()
+      } catch (err) {
+        console.error(err)
+      }
+
       // TODO: remove
       //
       // keychain.info()

@@ -9,6 +9,11 @@ const get = async (command) => {
   return resp.data
 }
 
+const post = async (command) => {
+  const resp = await lnReq.post(`/v1/${command}`)
+  return resp.data
+}
+
 const getInfo = async () => {
   const resp = await lnReq.get(`/v1/getinfo`)
   return resp.data
@@ -193,10 +198,14 @@ class Keychain extends LNKeychain {
     const transactions = await this.transactions()
 
     console.log("address:", this.address)
-    
+
     // const payreq       = await this.payreq()
     // const address      = await this.getAddress()
     // const channels     = await this.channels()
+  }
+
+  async testSendSimple() {
+    const recipient = this.address // send to yourself
   }
 
   // post peers - connect
