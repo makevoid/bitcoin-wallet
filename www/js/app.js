@@ -145,8 +145,4 @@ class App {
     return this.keychain.getNewAddress()
   }
 
-  // get balance() {
-  //   return this.keychain.balance
-  // }
-
 }

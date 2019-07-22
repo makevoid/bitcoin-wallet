@@ -15,6 +15,7 @@ const getInfo = async () => {
 }
 
 class Keychain extends LNKeychain {
+
   constructor({ store }) {
     super()
     this.storeDb    = store
@@ -93,7 +94,6 @@ class Keychain extends LNKeychain {
     }
     const resp = await post("channels/transactions", reqArgs)  // todo, refactor deduplicate
     console.log("resp:", resp, "\n")
-    //
   }
 
   async sendTxDest(dest, amt) {
@@ -109,37 +109,31 @@ class Keychain extends LNKeychain {
   async invoices() {
     const invoices = await get("invoices")
     console.log("invoices:", invoices, "\n")
-    // invoices
   }
 
   async payments() {
     const payments = await get("payments")
     console.log("payments:", payments, "\n")
-    //
   }
 
   async payreq() {
     const payreq = await get("payreq")
     console.log("payreq:", payreq, "\n")
-    //
   }
 
   async peers() {
     const peers = await get("peers")
     console.log("peers:", peers, "\n")
-    //
   }
 
   async transactions() {
     const transactions = await get("transactions")
     console.log("transactions:", transactions, "\n")
-    //
   }
 
   async utxos() {
     const utxos = await get("utxos")
     console.log("utxos:", utxos, "\n")
-    //
   }
 
   async newAddress() {
@@ -199,10 +193,10 @@ class Keychain extends LNKeychain {
     const transactions = await this.transactions()
 
     console.log("address:", this.address)
+    
     // const payreq       = await this.payreq()
     // const address      = await this.getAddress()
     // const channels     = await this.channels()
-    //
   }
 
   // post peers - connect
