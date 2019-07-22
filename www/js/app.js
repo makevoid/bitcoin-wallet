@@ -90,7 +90,7 @@ class App {
 
     const balanceInt = await this.keychain.balanceInt()
     console.log("balanceInt:", balanceInt)
-    
+
     // TODO: include rate into keychain
 
     // compare rate bitstamp
@@ -103,9 +103,26 @@ class App {
   async loadFX() {
     const price = await this.getBTCFx()
     this.rate = price
-    console.log("Balance USD:", this.balanceUsd)
-    console.log("Balance satoshis:", Math.round(this.balanceUsd * 100 * 100) / 100)
-    const data = { balanceUsd: this.balanceUsd }
+
+    // TODO: avoid doing another request, get cached balance if fresh
+    const balanceInt = await this.keychain.balanceInt()
+    console.log("balanceInt:", balanceInt)
+
+    const balanceSats = balanceInt
+    const balanceBtc  = balanceSats / 10**8
+    const balanceUsd  = balanceBtc * this.rate
+    const balanceUsdCents = Math.floor(balanceUsd * 10000) / 100
+
+    const data = {
+      balanceSats,
+      balanceUsd,
+      balanceUsdCents,
+      // balanceBtc,
+      // balanceBits,
+      // balanceMBtcs,  (millibits)
+      // balanceMillis,
+    }
+
     this.emit({ event: "balance", data: data })
   }
 

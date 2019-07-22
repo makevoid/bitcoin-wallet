@@ -5,7 +5,9 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
+    "all": "echo \"open two terminal windows, in the first, run: npm run browser2, in the second one, run this command: cordova run browser\n\nvisit http://localhost:8000 - your app will be there\"",
     "browser": "phonegap serve --port 8000 --autoreload ",
+    "browser2": "phonegap serve --port 8001 --autoreload ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

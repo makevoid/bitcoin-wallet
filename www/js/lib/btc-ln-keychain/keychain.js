@@ -44,20 +44,19 @@ class Keychain extends LNKeychain {
   }
 
   async balanceBtc() {
-    const balance = await get("balance/blockchain")
-    console.log("balance:", balance, "\n")
-    // total_balance, confirmed_balance, unconfirmed_balance
+    const { total_balance, confirmed_balance, unconfirmed_balance } = await get("balance/blockchain")
+    return { total_balance, confirmed_balance, unconfirmed_balance }
   }
 
   async balance() {
-    const balance = await get("balance/channels")
-    console.log("balance:", balance, "\n")
+    const { balance } = await get("balance/channels")
+    console.log("GET balance:", balance, "\n")
     // balance, pending_open_balance
     return { balance }
   }
 
   async balanceInt() {
-    const bal = await this.balance
+    const bal = await this.balance()
     return new Number(bal.balance)
   }
 

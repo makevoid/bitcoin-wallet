@@ -2,33 +2,25 @@
 // const Actions = require('./actions')
 
 class View {
+
+  // onload > model > (generate) events
+  // button > actions > model > event
+  // button > actions > model (sync) > viewUpdates
+  // events > viewUpdates
+
   constructor() {
-    this.receiveInputElemSel  = ".receive-screen .receive-address-input > input"
-    this.balanceElemSel  = ".balances > .balance > .bal"
-    this.sendButtonSel   = ".send-form .send-button"
-    this.sendAddressElemSel = ".send-form .recipient-address"
-    this.sendAmountElemSel  = ".send-form .send-amount"
-    this.refreshBalanceBtnSel  = ".balances.list .refresh-balance-btn"
-
-    this.listenToAppEvents()
-    this.bindButtons()
+    this.defineSelectors()
+    this.bindViewUpdatesToEvents()
+    this.bindButtonsToActions()
   }
 
-  bindButtons() {
+  bindButtonsToActions() {
     console.log("BIND")
-    this.sendButton.addEventListener("click", this.triggerSend.bind(this))
+    // receive view
     this.refreshBalanceBtn.addEventListener("click", this.refreshBalance.bind(this))
-  }
 
-  triggerSend() {
-    const address = this.sendAddressElem.value
-    const amount  = this.sendAmountElem.value
-    ;(async () => {
-      await Actions.send({ address, amount })
-      setTimeout(async () => this.refreshBalance(), 10000)
-    })().catch((err) => {
-      console.error(err)
-    })
+    // send view
+    this.sendButton.addEventListener("click", this.triggerSend.bind(this))
   }
 
   refreshBalance() {
@@ -39,11 +31,23 @@ class View {
     })
   }
 
-  listenToAppEvents() {
+  triggerSend() {
+    const address = this.sendAddressElem.value
+    const amount  = this.sendAmountElem.value
+
+    ;(async () => {
+      await Actions.send({ address, amount })
+      setTimeout(async () => this.refreshBalance(), 10000)
+    })().catch((err) => {
+      console.error(err)
+    })
+  }
+
+  bindViewUpdatesToEvents() {
     const eventsSelector = "html > body > div.events" // (hidden, empty div)
     const eventsElem = doc.querySelector(eventsSelector)
-    eventsElem.addEventListener('info', this.updateAddress.bind(this))
-    eventsElem.addEventListener('balance', this.updateBalance.bind(this))
+    eventsElem.addEventListener('info',     this.updateAddress.bind(this))
+    eventsElem.addEventListener('balance',  this.updateBalance.bind(this))
   }
 
   updateAddress(evt) {
@@ -52,11 +56,18 @@ class View {
   }
 
   updateBalance(evt) {
-    const { balanceUsd } = evt.detail
-    // TODO: use bignumber
-    const balanceUsdCents   = balanceUsd * 10 ** 2
-    const balanceCentsRound = Math.floor(balanceUsdCents * 100) / 100
-    this.balanceElem.innerHTML = balanceCentsRound
+    const {
+      balanceSats,
+      balanceUsd,
+      balanceUsdCents,
+      // balanceBtc,
+      // balanceBits,
+      // balanceMBtcs,  (millibits)
+      // balanceMillis,
+    } = evt.detail
+
+    this.balanceElem.innerHTML      = balanceSats
+    this.balanceFiatElem.innerHTML  = balanceUsdCents
   }
 
   // element getters (helpers)
@@ -67,6 +78,10 @@ class View {
 
   get balanceElem() {
     return doc.querySelector(this.balanceElemSel)
+  }
+
+  get balanceFiatElem() {
+    return doc.querySelector(this.balanceFiatElemSel)
   }
 
   get sendButton() {
@@ -83,6 +98,19 @@ class View {
 
   get refreshBalanceBtn() {
     return doc.querySelector(this.refreshBalanceBtnSel)
+  }
+
+  defineSelectors() {
+    // receive view
+    this.receiveInputElemSel  = ".receive-screen .receive-address-input > input"
+    this.balanceElemSel       = ".balances > .balance > .bal"
+    this.balanceFiatElemSel   = ".balances > .balance > .balance-fiat"
+    this.refreshBalanceBtnSel = ".balances.list .refresh-balance-btn"
+
+    // send view
+    this.sendAddressElemSel   = ".send-form .recipient-address"
+    this.sendAmountElemSel    = ".send-form .send-amount"
+    this.sendButtonSel        = ".send-form .send-button"
   }
 
 }
