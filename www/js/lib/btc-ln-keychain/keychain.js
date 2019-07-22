@@ -115,9 +115,14 @@ class Keychain extends LNKeychain {
     //
   }
 
+  async newAddress() {
+    const address = await get("newaddress")
+    console.log("address:", address, "\n")
+    return { address }
+  }
+
   async testAllGets() {
-    const utxos        = await get("utxos")
-    console.log("utxos:", utxos, "\n")
+    const utxos        = await this.utxos()
     const listChannels = await this.listChannels()
     // const channels     = await this.channels()
     const balanceBtc   = await this.balanceBtc()
@@ -127,6 +132,7 @@ class Keychain extends LNKeychain {
     // const payreq       = await this.payreq()
     const peers        = await this.peers()
     const transactions = await this.transactions()
+    const address      = await this.newAddress()
     //
   }
 
