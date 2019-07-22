@@ -37,19 +37,11 @@ class App {
   initKeychain() {
     const keychain = new Keychain({ store: localStorage })
     this.keychain = keychain
-    // keychain.info()
-    const data = {
-      address: keychain.address
-    }
-    // const tabChangeEvt = () => {
-    //   console.log("tab change")
-    // }
-    // document.querySelector('#main-tabbar').addEventListener('prechange', tabChangeEvt)
-    this.emit({ event: "info", data: data })
 
     ;(async () => {
       try {
         await keychain.initLN()
+        this.emitAddressEvent()
       } catch (err) {
         console.error(err)
       }
@@ -65,9 +57,25 @@ class App {
       } catch (err) {
         console.error(err)
       }
+
+      // TODO: remove
+      //
+      // keychain.info()
+      // const tabChangeEvt = () => {
+      //   console.log("tab change")
+      // }
+      // document.querySelector('#main-tabbar').addEventListener('prechange', tabChangeEvt)
+
     })().catch((err) => {
       console.error(err)
     })
+  }
+
+  emitAddressEvent() {
+    const data = {
+      address: this.keychain.address,
+    }
+    this.emit({ event: "info", data: data })
   }
 
   emit({ event, data }) {

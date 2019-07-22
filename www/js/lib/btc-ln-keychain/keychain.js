@@ -51,7 +51,8 @@ class Keychain extends LNKeychain {
   async initLN() {
     const info = await get("getinfo")
     console.log("info:", info, "\n")
-    this.address = await this.getAddress()
+    const addr = await this.getAddress()
+    this.address = addr.address
   }
 
   async listChannels() {
@@ -172,7 +173,7 @@ class Keychain extends LNKeychain {
     let address = new NullAddress()
     if (this.unusedAddressPresent()) {
       address = this.addressLast()
-      address = address.address.address
+      address = address.address
     } else {
       address = await this.newAddress()
       address = address.address.address
@@ -196,6 +197,8 @@ class Keychain extends LNKeychain {
     const payments     = await this.payments()
     const peers        = await this.peers()
     const transactions = await this.transactions()
+
+    console.log("address:", this.address)
     // const payreq       = await this.payreq()
     // const address      = await this.getAddress()
     // const channels     = await this.channels()

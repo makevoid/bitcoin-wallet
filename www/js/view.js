@@ -52,6 +52,7 @@ class View {
 
   updateAddress(evt) {
     const { address } = evt.detail
+    console.log("evt received: ", address)
     this.receiveInputElem.value = address
   }
 
