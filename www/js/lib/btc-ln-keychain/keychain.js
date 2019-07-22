@@ -53,8 +53,13 @@ class Keychain extends LNKeychain {
     const balance = await get("balance/channels")
     console.log("balance:", balance, "\n")
     // balance, pending_open_balance
+    return { balance }
   }
 
+  async balanceInt() {
+    const bal = await this.balance
+    return new Number(bal.balance)
+  }
 
   async sendTx(paymentReq) {
     const reqArgs = {
@@ -110,7 +115,7 @@ class Keychain extends LNKeychain {
     console.log("utxos:", utxos, "\n")
     //
   }
-  
+
   async testAllGets() {
     const utxos        = await get("utxos")
     console.log("utxos:", utxos, "\n")
@@ -120,7 +125,7 @@ class Keychain extends LNKeychain {
     const balance      = await this.balance()
     const invoices     = await this.invoices()
     const payments     = await this.payments()
-    const payreq       = await this.payreq()
+    // const payreq       = await this.payreq()
     const peers        = await this.peers()
     const transactions = await this.transactions()
     //

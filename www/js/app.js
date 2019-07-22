@@ -53,7 +53,7 @@ class App {
       } catch (err) {
         console.error(err)
       }
-      
+
       try {
         await keychain.testAllGets()
       } catch (err) {
@@ -84,8 +84,13 @@ class App {
     // const { balance } = await this.keychain.balance()
 
     // TODO: check balance call
-    const { confirmed_balance, unconfirmed_balance } = await this.keychain.balance()
+    const balance = await this.keychain.balance()
+    console.log("balance:", balance)
+    // TODO: const { confirmed_balance, unconfirmed_balance } = balance
 
+    const balanceInt = await this.keychain.balanceInt()
+    console.log("balanceInt:", balanceInt)
+    
     // TODO: include rate into keychain
 
     // compare rate bitstamp
