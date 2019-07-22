@@ -1,14 +1,12 @@
 // helpers
 
-// helpers - lib - eth
+// helpers - lib - btc
 
-const isEthAddress = (address) => (
-  window.web3utils.isAddress(address)
-)
+const isAddress = (address) => {
+  // TODO: in bitcore-lib - new bitcore.Address() then check properties, in bitcoinjs-lib? (TODO, find out)
+}
 
-
-// helpers - toast
-// other animation-options  { duration: 0.2, delay: 0, timing: 'ease-in' }
+// view helpers - toast
 
 const msgToast = (message) => {
   ons.notification.toast(message, { timeout: 1000, animation: 'default' })

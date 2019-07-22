@@ -1,7 +1,7 @@
-const https = require('https')
-const axios = window.axios
-const cert      = tlsCert
-const macaroon  = lnMacaroon
+const https    = require('https')
+const axios    = window.axios
+const cert     = tlsCert
+const macaroon = lnMacaroon
 
 const httpsAgent = new https.Agent({
   cert: cert,

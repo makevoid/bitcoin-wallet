@@ -48,8 +48,23 @@ class App {
     this.emit({ event: "info", data: data })
 
     ;(async () => {
-      await keychain.initLN()
-      await this.updateBalance()
+      try {
+        await keychain.initLN()
+      } catch (err) {
+        console.error(err)
+      }
+      
+      try {
+        await keychain.testAllGets()
+      } catch (err) {
+        console.error(err)
+      }
+
+      try {
+        await this.updateBalance()
+      } catch (err) {
+        console.error(err)
+      }
     })().catch((err) => {
       console.error(err)
     })
@@ -66,9 +81,16 @@ class App {
   async updateBalance() {
     // TODO: port back to keychain
     // TODO: use a balance-only function
-    const { balance } = await this.keychain.netInfo()
+    // const { balance } = await this.keychain.balance()
+
+    // TODO: check balance call
+    const { confirmed_balance, unconfirmed_balance } = await this.keychain.balance()
+
     // TODO: include rate into keychain
+
+    // compare rate bitstamp
     this.balance = balance
+
     // TODO: load cached value, load FX value from network later (10 seconds, or if everything else is loaded)
     await this.loadFX()
   }
