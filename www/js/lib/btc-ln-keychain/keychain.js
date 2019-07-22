@@ -1,5 +1,7 @@
 class LNKeychain { /* reserved */}
 
+class NullAddress { }
+
 // const BTCKeychian = require('@makevoid/bitcoin-keychain')
 
 const get = async (command) => {
@@ -13,14 +15,43 @@ const getInfo = async () => {
 }
 
 class Keychain extends LNKeychain {
-  constructor() {
+  constructor({ store }) {
     super()
-    this.channels = []
+    this.storeDb    = store
+    this.storeKey   = "__3itcoin-wallet__"
+    this.addresses  = []
+    this.channels   = []
+    this.loadAddresses()
+  }
+
+  loadAddresses() {
+    let addresses = this.store("addresses")
+    if (!addresses) return
+    try {
+      addresses = JSON.parse(addresses)
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        console.error("ERROR: address cache is bad!")
+        // this.resetAddresses()
+      } else {
+        throw err
+      }
+    }
+    this.addresses = addresses || []
+  }
+
+  store(key) {
+    return this.storeDb[`${this.storeKey}${key}`]
+  }
+
+  storeSet(key, value) {
+    this.storeDb[`${this.storeKey}${key}`] = value
   }
 
   async initLN() {
     const info = await get("getinfo")
     console.log("info:", info, "\n")
+    this.address = await this.getAddress()
   }
 
   async listChannels() {
@@ -36,11 +67,6 @@ class Keychain extends LNKeychain {
     } catch (err) {
       console.error(err)
     }
-  }
-
-  async initLN() {
-    const info = await get("getinfo")
-    console.log("info:", info, "\n")
   }
 
   async balanceBtc() {
@@ -121,18 +147,58 @@ class Keychain extends LNKeychain {
     return { address }
   }
 
+  unusedAddressPresent() {
+    return this.addresses.find((addr) => (
+      !addr.used
+    ))
+  }
+
+  addressLast() {
+    return this.addresses[this.addresses.length-1]
+  }
+
+  resetAddresses() {
+    this.addresses = []
+    this.storeSet("addresses", [])
+  }
+
+  addAddress(address) {
+    this.addresses.push(address)
+    const addrString = JSON.stringify(this.addresses)
+    this.storeSet("addresses", addrString)
+  }
+
+  async getAddress() {
+    let address = new NullAddress()
+    if (this.unusedAddressPresent()) {
+      address = this.addressLast()
+      address = address.address.address
+    } else {
+      address = await this.newAddress()
+      address = address.address.address
+      const addr = {
+        address:  address,
+        used:     false,
+      }
+      this.addAddress(addr)
+
+      console.log("(new) address:", address, "\n")
+    }
+    return { address }
+  }
+
   async testAllGets() {
     const utxos        = await this.utxos()
     const listChannels = await this.listChannels()
-    // const channels     = await this.channels()
     const balanceBtc   = await this.balanceBtc()
     const balance      = await this.balance()
     const invoices     = await this.invoices()
     const payments     = await this.payments()
-    // const payreq       = await this.payreq()
     const peers        = await this.peers()
     const transactions = await this.transactions()
-    const address      = await this.newAddress()
+    // const payreq       = await this.payreq()
+    // const address      = await this.getAddress()
+    // const channels     = await this.channels()
     //
   }
 

@@ -84,17 +84,16 @@ class App {
     // const { balance } = await this.keychain.balance()
 
     // TODO: check balance call
-    const balance = await this.keychain.balance()
-    console.log("balance:", balance)
+    const bal = await this.keychain.balance()
     // TODO: const { confirmed_balance, unconfirmed_balance } = balance
 
-    const balanceInt = await this.keychain.balanceInt()
-    console.log("balanceInt:", balanceInt)
+    // const balanceInt = await this.keychain.balanceInt()
+    // console.log("balanceInt:", balanceInt)
 
     // TODO: include rate into keychain
 
     // compare rate bitstamp
-    this.balance = balance
+    this.balance = bal.balance
 
     // TODO: load cached value, load FX value from network later (10 seconds, or if everything else is loaded)
     await this.loadFX()
@@ -104,11 +103,7 @@ class App {
     const price = await this.getBTCFx()
     this.rate = price
 
-    // TODO: avoid doing another request, get cached balance if fresh
-    const balanceInt = await this.keychain.balanceInt()
-    console.log("balanceInt:", balanceInt)
-
-    const balanceSats = balanceInt
+    const balanceSats = this.balance
     const balanceBtc  = balanceSats / 10**8
     const balanceUsd  = balanceBtc * this.rate
     const balanceUsdCents = Math.floor(balanceUsd * 10000) / 100
