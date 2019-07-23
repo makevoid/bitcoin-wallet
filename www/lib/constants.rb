@@ -4,7 +4,7 @@ TEMPLATES = %w(
   tabbar
   send
   receive
-  transactions
+  payments
 )
 
 

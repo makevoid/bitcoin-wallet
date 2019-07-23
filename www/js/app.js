@@ -47,12 +47,6 @@ class App {
       }
 
       try {
-        await keychain.testAllGets()
-      } catch (err) {
-        console.error(err)
-      }
-
-      try {
         await this.updateBalance()
       } catch (err) {
         console.error(err)
@@ -63,6 +57,12 @@ class App {
       } catch (err) {
         console.error(err)
       }
+
+      // try {
+      //   await keychain.testAllGets()
+      // } catch (err) {
+      //   console.error(err)
+      // }
 
       // TODO: remove
       //

@@ -58,9 +58,42 @@ class Keychain extends LNKeychain {
     // LN "address" (ID pubkey)
     this.address = identity_pubkey
 
+    let payments = await this.payments()
+    payments = this.filterPayments(payments.payments)
+    this.payments = payments
+
     // BTC address
     // const addr = await this.getAddress()
     // this.address = addr.address
+  }
+
+  filterPayments(payments) {
+    return payments.map((payment) => (
+      this.filterPayment(payment)
+    ))
+  }
+
+  filterPayment(payment) {
+    const {
+      payment_hash,
+      value,
+      creation_date,
+      status,
+      payment_request,
+      path,
+    } = payment
+    const paymentHash    = payment_hash
+    const creationDate   = new Date(new Number(creation_date))
+    const paymentRequest = payment_request
+    const numHops = path.length
+    return {
+      paymentHash,
+      value: new Number(value),
+      creationDate,
+      status: status.toLowerCase(),
+      numHops,
+      paymentRequest,
+    }
   }
 
   async listChannels() {
@@ -125,8 +158,11 @@ class Keychain extends LNKeychain {
   }
 
   async payments() {
-    const payments = await get("payments")
-    console.log("payments:", payments, "\n")
+    let payments = await get("payments")
+    payments = payments.payments
+    return {
+      payments
+    }
   }
 
   async payreq() {
@@ -201,9 +237,9 @@ class Keychain extends LNKeychain {
     const balanceBtc   = await this.balanceBtc()
     const balance      = await this.balance()
     const invoices     = await this.invoices()
-    const payments     = await this.payments()
     const peers        = await this.peers()
     const transactions = await this.transactions()
+    const payments     = await this.payments()
 
     console.log("address:", this.address)
 
@@ -218,28 +254,53 @@ class Keychain extends LNKeychain {
     }).join('');
   }
 
+  async sendTransaction({ txArgs }) {
+    let resp, status
+    try {
+      resp = await post({
+        command: "channels/transactions",
+        txArgs
+      })
+      status   = "paying-invoice"
+    } catch (err) {
+      if (this.isExpiredError(err)) {
+        resp = {}
+        status = 'invoice-expired'
+      } else {
+        throw err
+      }
+    }
+    return { resp, status }
+  }
+
   async payInvoice(lnInvoice) {
-    const reqArgs = {
+    const txArgs = {
       payment_request: lnInvoice,
     }
-    const resp = await post({
-      command: "channels/transactions",
-      reqArgs
-    })
 
+    let { resp, status } = await this.sendTransaction({ txArgs })
+    let numHops, preimage
     const { payment_hash, payment_preimage, payment_route } = resp
     console.log("resp:", resp, "\n")
 
-    let numHops, preimage, status
+    numHops  = new NullHopsNumber()
+    preimage = new NullPaymentPreImage()
+
+    if (status == 'invoice-expired') {
+      return {
+        paymentHash: payment_hash,
+        paymentPreimage: preimage,
+        numHops,
+        status
+      }
+    }
+
     if (!payment_route) {
-      numHops  = new NullHopsNumber()
-      preimage = new NullPaymentPreImage()
       status   = "invoice-already-paid"
     } else {
       const { hops } = payment_route
       numHops  = hops.length
       preimage = payment_preimage
-      status   = "paying-invoice"
     }
 
     return {
@@ -262,10 +323,7 @@ class Keychain extends LNKeychain {
     } = await this.payInvoice(lnInvoice)
 
     console.log({
-      paymentHash,
-      paymentPreimage,
-      numHops,
-      status,
+      paymentHash, paymentPreimage, numHops, status
     })
 
     return {
@@ -274,6 +332,10 @@ class Keychain extends LNKeychain {
       numHops,
       status,
     }
+  }
+
+  async isExpiredError(err) {
+    return err.response.data.error.match(/^invoice expired/)
   }
 
   // post peers - connect
