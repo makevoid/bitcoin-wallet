@@ -6,9 +6,30 @@
         %ons-icon.icon-main-right.icon-settings{ icon: "ion-md-settings" }
 
 .centered
+  %script
+    :plain
+      //const arrow = "down"
+  %script.payment_template{ type: "application/haml" }
+    :plain
+      %ons-list-header
+      %ons-list-item
+        .left
+          %ons-icon.list-item__icon{ icon: "ion-md-arrow-\#{arrow}" }
+        .center
+          Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
+          %span.tx tx: 0xa1f2b1...
+
 
   %ons-list.transactions.tx-list
-    %ons-list-header Today
+    -# %ons-list-header Today
+    %ons-list-header
+    %ons-list-item
+      .left
+        %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
+      .center
+        Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
+        %span.tx tx: 0xa1f2b1...
+    %ons-list-header
     %ons-list-item
       .left
         %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
@@ -16,20 +37,21 @@
         Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
         %span.tx tx: 0xa1f2b1...
 
-    .s3
-    %ons-list-header Yesterday
-    %ons-list-item
-      .left
-        %ons-icon.list-item__icon{ icon: "ion-md-arrow-up" }
-      .center
-        Sent 3.123 #{Conf.currency} to '0xadd43442....a23'
-        %span.tx tx: 0xb23dc2...
 
     .s3
-    %ons-list-header 26/06/19
-    %ons-list-item
-      .left
-        %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
-      .center
-        Received 26.2 #{Conf.currency} from '0xadd43443....a21'
-        %span.tx tx: 0x45fe31...
+    -# %ons-list-header Yesterday
+    -# %ons-list-item
+    -#   .left
+    -#     %ons-icon.list-item__icon{ icon: "ion-md-arrow-up" }
+    -#   .center
+    -#     Sent 3.123 #{Conf.currency} to '0xadd43442....a23'
+    -#     %span.tx tx: 0xb23dc2...
+    -#
+    -# .s3
+    -# %ons-list-header 26/06/19
+    -# %ons-list-item
+    -#   .left
+    -#     %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
+    -#   .center
+    -#     Received 26.2 #{Conf.currency} from '0xadd43443....a21'
+    -#     %span.tx tx: 0x45fe31...

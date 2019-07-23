@@ -58,6 +58,9 @@ class App {
         console.error(err)
       }
 
+      // var main = Haml(main_haml)
+
+
       // try {
       //   await keychain.testAllGets()
       // } catch (err) {

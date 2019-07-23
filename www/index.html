@@ -164,8 +164,33 @@ USD cents
 </div>
 </ons-toolbar>
 <div class='centered'>
+<script>
+//const arrow = "down"
+</script>
+<script class='payment_template' type='application/haml'>
+%ons-list-header
+%ons-list-item
+  .left
+    %ons-icon.list-item__icon{ icon: "ion-md-arrow-#{arrow}" }
+  .center
+    Receiving 10 sats (0 conf.) from '0xadd4344....b31'
+    %span.tx tx: 0xa1f2b1...
+
+
+
+</script>
 <ons-list class='transactions tx-list'>
-<ons-list-header>Today</ons-list-header>
+<ons-list-header></ons-list-header>
+<ons-list-item>
+<div class='left'>
+<ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
+</div>
+<div class='center'>
+Receiving 10 sats (0 conf.) from '0xadd4344....b31'
+<span class='tx'>tx: 0xa1f2b1...</span>
+</div>
+</ons-list-item>
+<ons-list-header></ons-list-header>
 <ons-list-item>
 <div class='left'>
 <ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
@@ -176,27 +201,6 @@ Receiving 10 sats (0 conf.) from '0xadd4344....b31'
 </div>
 </ons-list-item>
 <div class='s3'></div>
-<ons-list-header>Yesterday</ons-list-header>
-<ons-list-item>
-<div class='left'>
-<ons-icon class='list-item__icon' icon='ion-md-arrow-up'></ons-icon>
-</div>
-<div class='center'>
-Sent 3.123 sats to '0xadd43442....a23'
-<span class='tx'>tx: 0xb23dc2...</span>
-</div>
-</ons-list-item>
-<div class='s3'></div>
-<ons-list-header>26/06/19</ons-list-header>
-<ons-list-item>
-<div class='left'>
-<ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
-</div>
-<div class='center'>
-Received 26.2 sats from '0xadd43443....a21'
-<span class='tx'>tx: 0x45fe31...</span>
-</div>
-</ons-list-item>
 </ons-list>
 </div>
 
@@ -208,6 +212,7 @@ Received 26.2 sats from '0xadd43443....a21'
 </div>
 <script src='cordova.js' type='text/javascript'></script>
 <script src='js/vendor/axios.js' type='text/javascript'></script>
+<script src='js/vendor/haml.js' type='text/javascript'></script>
 <!-- / dev version imports - TODO: remove for open beta release -->
 <script src='js/lib/bind-dev-btns.js' type='text/javascript'></script>
 <script>
