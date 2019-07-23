@@ -9,8 +9,8 @@ const get = async (command) => {
   return resp.data
 }
 
-const post = async (command) => {
-  const resp = await lnReq.post(`/v1/${command}`)
+const post = async ({ command, reqArgs }) => {
+  const resp = await lnReq.post(`/v1/${command}`, reqArgs)
   return resp.data
 }
 
@@ -57,8 +57,13 @@ class Keychain extends LNKeychain {
   async initLN() {
     const info = await get("getinfo")
     console.log("info:", info, "\n")
-    const addr = await this.getAddress()
-    this.address = addr.address
+    const { identity_pubkey } = info
+    // LN "address" (ID pubkey)
+    this.address = identity_pubkey
+
+    // BTC address
+    // const addr = await this.getAddress()
+    // this.address = addr.address
   }
 
   async listChannels() {
@@ -97,7 +102,10 @@ class Keychain extends LNKeychain {
     const reqArgs = {
       payment_request: paymentReq,
     }
-    const resp = await post("channels/transactions", reqArgs)  // todo, refactor deduplicate
+    const resp = await post({
+      command: "channels/transactions",
+      reqArgs
+    })  // todo, refactor deduplicate
     console.log("resp:", resp, "\n")
   }
 
@@ -106,7 +114,10 @@ class Keychain extends LNKeychain {
       dest: dest,
       amt: amt,
     }
-    const resp = await post("channels/transactions", reqArgs)
+    const resp = await post({
+      command: "channels/transactions",
+      reqArgs
+    })
     console.log("resp", resp, "\n")
   }
 
@@ -204,8 +215,26 @@ class Keychain extends LNKeychain {
     // const channels     = await this.channels()
   }
 
+  toHexString(byteArray) {
+    return Array.prototype.map.call(byteArray, function(byte) {
+      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('');
+  }
+
+
+
   async testSendSimple() {
-    const recipient = this.address // send to yourself
+    // const recipient = this.address // send to yourself (LN ID pubkey)
+    const ln_invoice = "lnbc110n1pwnd26dpp5h53f96w5ags0t70ywf6tt5gh6wdyfutxwh6wzadyuhdussx9rxesdqu2askcmr9wssx7e3q2dshgmmndp5scqzpgxqrrss6wqjdaqpgqyrh6ae6myuems6v05vwsv8k6ezwsdp4w26uzjygeys62u2x3u7vrdzecks9env5d89sdp95genqld5xmc2txt9v45nyyqpsqf6ar"
+
+    const reqArgs = {
+      payment_request: ln_invoice,
+    }
+    const resp = await post({
+      command: "channels/transactions",
+      reqArgs
+    })  // todo, refactor deduplicate
+    console.log("resp:", resp, "\n")
   }
 
   // post peers - connect

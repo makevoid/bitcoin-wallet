@@ -10,7 +10,7 @@ const httpsAgent = new https.Agent({
 
 const lnReq = axios.create({
   baseURL: 'https://54.246.206.3:8080',
-  timeout: 1000,
+  timeout: 10000,
   headers: {
     'Grpc-Metadata-macaroon': macaroon,
   },
