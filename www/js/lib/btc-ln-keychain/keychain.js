@@ -1,6 +1,8 @@
 class LNKeychain { /* reserved */}
 
 class NullAddress { }
+class NullHopsNumber { }
+class NullPaymentPreImage { }
 
 // const BTCKeychian = require('@makevoid/bitcoin-keychain')
 
@@ -11,11 +13,6 @@ const get = async (command) => {
 
 const post = async ({ command, reqArgs }) => {
   const resp = await lnReq.post(`/v1/${command}`, reqArgs)
-  return resp.data
-}
-
-const getInfo = async () => {
-  const resp = await lnReq.get(`/v1/getinfo`)
   return resp.data
 }
 
@@ -221,25 +218,65 @@ class Keychain extends LNKeychain {
     }).join('');
   }
 
-
-
-  async testSendSimple() {
-    // const recipient = this.address // send to yourself (LN ID pubkey)
-    const ln_invoice = "lnbc110n1pwnd26dpp5h53f96w5ags0t70ywf6tt5gh6wdyfutxwh6wzadyuhdussx9rxesdqu2askcmr9wssx7e3q2dshgmmndp5scqzpgxqrrss6wqjdaqpgqyrh6ae6myuems6v05vwsv8k6ezwsdp4w26uzjygeys62u2x3u7vrdzecks9env5d89sdp95genqld5xmc2txt9v45nyyqpsqf6ar"
-
+  async payInvoice(lnInvoice) {
     const reqArgs = {
-      payment_request: ln_invoice,
+      payment_request: lnInvoice,
     }
     const resp = await post({
       command: "channels/transactions",
       reqArgs
-    })  // todo, refactor deduplicate
+    })
+
+    const { payment_hash, payment_preimage, payment_route } = resp
     console.log("resp:", resp, "\n")
+
+    let numHops, preimage, status
+    if (!payment_route) {
+      numHops  = new NullHopsNumber()
+      preimage = new NullPaymentPreImage()
+      status   = "invoice-already-paid"
+    } else {
+      const { hops } = payment_route
+      numHops  = hops.length
+      preimage = payment_preimage
+      status   = "paying-invoice"
+    }
+
+    return {
+      paymentHash: payment_hash,
+      paymentPreimage: preimage,
+      numHops,
+      status
+    }
+  }
+
+  async testSendSimple() {
+    // const recipient = this.address // send to yourself (LN ID pubkey)
+    const lnInvoice = "lnbc150n1pwnwx20pp5stg9gcj6ecnerlk835509rj9c4vsres8ahn52gygyfgaed03zurqdqu2askcmr9wssx7e3q2dshgmmndp5scqzpgxqrrssuapxqpc765hgvneuasf6x945xzdea5trtz2gg9v60fh0yvc2ctl9a990t9zm3uzva7mtwhf3dcghm9nllqs82tnl7p3dzwvfv07q66cq8kaq60"
+
+    const {
+      paymentHash,
+      paymentPreimage,
+      numHops,
+      status,
+    } = await this.payInvoice(lnInvoice)
+
+    console.log({
+      paymentHash,
+      paymentPreimage,
+      numHops,
+      status,
+    })
+
+    return {
+      paymentHash,
+      paymentPreimage,
+      numHops,
+      status,
+    }
   }
 
   // post peers - connect
-
-  // post transactions - real send?
 
   // ---------
 
