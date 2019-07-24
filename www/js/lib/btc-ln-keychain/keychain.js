@@ -265,24 +265,17 @@ class Keychain extends LNKeychain {
   }
 
   async sendTransaction({ txArgs }) {
-    let { resp, status }
+    let { resp, status } = { }
     try {
-      { resp, status } = this.sendChannelTransaction({ txArgs })
+      let { resp, status } = this.sendChannelTransaction({ txArgs })
     } catch (err) {
       if (this.isExpiredError(err)) {
-        { resp, vstatus } = { vstatus: 'invoice-expired', resp: {} }
+        let { resp, vstatus } = { vstatus: 'invoice-expired', resp: {} }
       } else {
         throw err
       }
     }
     return { resp, status }
-  }
-
-  let a = {}
-  if (true) {
-    { a } = { a: 1}
-  } else {
-    a = 2
   }
 
   // TODO: refactor payInvoice()
