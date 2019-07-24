@@ -4,6 +4,14 @@
   box-sizing: border-box;
 } */
 
+/* Onsen UI overriders */
+
+/* badges - change the importance of badges (from red to blue) */
+
+.tabbar__button > .notification {
+  background: #37A;
+}
+
 /* utils */
 
 .rel {
@@ -126,4 +134,47 @@ ons-col.btn, .btn {
 
 ons-col.btn.btn-info, .btn.btn-info {
   background: #9ae;
+}
+
+/* TMP styles - TODO refactor */
+
+/* HELPERS */
+/* ------- */
+
+/* we could keep the helpers or remove everything and just style .ln-tx-label :D */
+/* %span.ln-tx-label.block.top30.micro.rel.upcase */
+
+/* a very strong span, in display (layout) terms :D */
+span.block {
+  display: block;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.rel {
+  position: relative
+}
+
+.upcase {
+  text-transform: uppercase;
+}
+
+.ons-coolfont {
+  font-family: -apple-system,'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;
+}
+
+.top30 { top: -30px; }
+
+span.mini {
+  font-size: 0.7em;
+}
+
+span.micro {
+  font-size: 0.47em;
+}
+
+.bold {
+  font-weight: bold;
 }

@@ -26,7 +26,7 @@
 <ons-tabbar id='main-tabbar' position='bottom'>
 <ons-tab active class='active receive' icon='ion-md-arrow-down' label='Receive' page='receive.html'></ons-tab>
 <ons-tab class='send' icon='ion-md-arrow-up' label='Send' page='send.html'></ons-tab>
-<ons-tab badge='2' class='payments' icon='ion-md-list' label='Payments' page='payments.html'></ons-tab>
+<ons-tab badge='2' class='payments' icon='ion-md-list' label='Transactions' page='payments.html'></ons-tab>
 </ons-tabbar>
 
 </ons-page>
@@ -154,7 +154,10 @@ USD cents
 <template id='payments.html'>
 <ons-page class='tpl-payments'>
 <ons-toolbar>
-<div class='center'>Payments</div>
+<div class='center'>
+Transactions
+<span class='ln-tx-label block micro bold rel top30 upcase ons-coolfont'>(LN Payments)</span>
+</div>
 <div class='right'>
 <ons-toolbar-button>
 <a class='btn-settings button-settings settings-button'>
@@ -165,42 +168,31 @@ USD cents
 </ons-toolbar>
 <div class='centered'>
 <script>
-//const arrow = "down"
+
 </script>
-<script class='payment_template' type='application/haml'>
+<script class='payment_template' id='payment_template' type='application/haml'>
+-# object = {
+-#  arrow: "up|down",
+-#  amount: 10,
+-#  invoice: "1234",
+-# }
 %ons-list-header
 %ons-list-item
   .left
     %ons-icon.list-item__icon{ icon: "ion-md-arrow-#{arrow}" }
   .center
-    Receiving 10 sats (0 conf.) from '0xadd4344....b31'
-    %span.tx tx: 0xa1f2b1...
-
+    Receiving #{amount} sats - invoice: '#{invoice}'
+    -#  %span.tx tx: 0xa1f2b1...
 
 
 </script>
-<ons-list class='transactions tx-list'>
-<ons-list-header></ons-list-header>
+<ons-list class='payments tx-list payments-list'>
+<div class='loading'>
+<ons-list-header>Loading</ons-list-header>
 <ons-list-item>
-<div class='left'>
-<ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
-</div>
-<div class='center'>
-Receiving 10 sats (0 conf.) from '0xadd4344....b31'
-<span class='tx'>tx: 0xa1f2b1...</span>
-</div>
+<span class='mini'>loading payments list...</span>
 </ons-list-item>
-<ons-list-header></ons-list-header>
-<ons-list-item>
-<div class='left'>
-<ons-icon class='list-item__icon' icon='ion-md-arrow-down'></ons-icon>
 </div>
-<div class='center'>
-Receiving 10 sats (0 conf.) from '0xadd4344....b31'
-<span class='tx'>tx: 0xa1f2b1...</span>
-</div>
-</ons-list-item>
-<div class='s3'></div>
 </ons-list>
 </div>
 

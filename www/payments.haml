@@ -1,5 +1,7 @@
 %ons-toolbar
-  .center Payments
+  .center
+    Transactions
+    %span.ln-tx-label.block.micro.bold.rel.top30.upcase.ons-coolfont (LN Payments)
   .right
     %ons-toolbar-button
       %a.btn-settings.button-settings.settings-button
@@ -8,50 +10,47 @@
 .centered
   %script
     :plain
-      //const arrow = "down"
-  %script.payment_template{ type: "application/haml" }
+  %script.payment_template#payment_template{ type: "application/haml" }
     :plain
+      -# object = {
+      -#  arrow: "up|down",
+      -#  amount: 10,
+      -#  invoice: "1234",
+      -# }
       %ons-list-header
       %ons-list-item
         .left
           %ons-icon.list-item__icon{ icon: "ion-md-arrow-\#{arrow}" }
         .center
-          Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
-          %span.tx tx: 0xa1f2b1...
+          Receiving \#{amount} #{Conf.currency} - invoice: '\#{invoice}'
+          -#  %span.tx tx: 0xa1f2b1...
 
-
-  %ons-list.transactions.tx-list
+  %ons-list.payments.tx-list.payments-list
     -# %ons-list-header Today
-    %ons-list-header
-    %ons-list-item
-      .left
-        %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
-      .center
-        Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
-        %span.tx tx: 0xa1f2b1...
-    %ons-list-header
-    %ons-list-item
-      .left
-        %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
-      .center
-        Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
-        %span.tx tx: 0xa1f2b1...
+    .loading
+      %ons-list-header Loading
+      %ons-list-item
+        %span.mini loading payments list...
 
-
-    .s3
-    -# %ons-list-header Yesterday
-    -# %ons-list-item
-    -#   .left
-    -#     %ons-icon.list-item__icon{ icon: "ion-md-arrow-up" }
-    -#   .center
-    -#     Sent 3.123 #{Conf.currency} to '0xadd43442....a23'
-    -#     %span.tx tx: 0xb23dc2...
+    -# ... mock view...
     -#
-    -# .s3
-    -# %ons-list-header 26/06/19
+    -# %ons-list-header
     -# %ons-list-item
     -#   .left
     -#     %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
     -#   .center
-    -#     Received 26.2 #{Conf.currency} from '0xadd43443....a21'
-    -#     %span.tx tx: 0x45fe31...
+    -#     Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
+    -#     %span.tx tx: 0xa1f2b1...
+    -# %ons-list-header
+    -# %ons-list-item
+    -#   .left
+    -#     %ons-icon.list-item__icon{ icon: "ion-md-arrow-down" }
+    -#   .center
+    -#     Receiving 10 #{Conf.currency} (0 conf.) from '0xadd4344....b31'
+    -#     %span.tx tx: 0xa1f2b1...
+
+    -# mock: headers
+
+    -# %ons-list-header Yesterday
+    -# %ons-list-header 21/07/19
+    -# %ons-list-header 26/06/19

@@ -24,6 +24,7 @@ class Keychain extends LNKeychain {
     this.storeKey   = "__3itcoin-wallet__"
     this.addresses  = []
     this.channels   = []
+    this.payments   = []
     this.loadAddresses()
   }
 
@@ -254,24 +255,37 @@ class Keychain extends LNKeychain {
     }).join('');
   }
 
+  async sendChannelTransaction({ txArgs }) {
+    const resp = await post({
+      command: "channels/transactions",
+      txArgs
+    })
+    const status   = "paying-invoice"
+    return { resp, status }
+  }
+
   async sendTransaction({ txArgs }) {
-    let resp, status
+    let { resp, status }
     try {
-      resp = await post({
-        command: "channels/transactions",
-        txArgs
-      })
-      status   = "paying-invoice"
+      { resp, status } = this.sendChannelTransaction({ txArgs })
     } catch (err) {
       if (this.isExpiredError(err)) {
-        resp = {}
-        status = 'invoice-expired'
+        { resp, vstatus } = { vstatus: 'invoice-expired', resp: {} }
       } else {
         throw err
       }
     }
     return { resp, status }
   }
+
+  let a = {}
+  if (true) {
+    { a } = { a: 1}
+  } else {
+    a = 2
+  }
+
+  // TODO: refactor payInvoice()
 
   async payInvoice(lnInvoice) {
     const txArgs = {
@@ -311,6 +325,9 @@ class Keychain extends LNKeychain {
     }
   }
 
+
+  // invoice send example - TODO: remove (convert to a test)
+  //
   async testSendSimple() {
     // const recipient = this.address // send to yourself (LN ID pubkey)
     const lnInvoice = "lnbc150n1pwnwx20pp5stg9gcj6ecnerlk835509rj9c4vsres8ahn52gygyfgaed03zurqdqu2askcmr9wssx7e3q2dshgmmndp5scqzpgxqrrssuapxqpc765hgvneuasf6x945xzdea5trtz2gg9v60fh0yvc2ctl9a990t9zm3uzva7mtwhf3dcghm9nllqs82tnl7p3dzwvfv07q66cq8kaq60"
@@ -334,9 +351,17 @@ class Keychain extends LNKeychain {
     }
   }
 
+  // TODO: refactor out
+  //
   async isExpiredError(err) {
     return err.response.data.error.match(/^invoice expired/)
   }
+
+
+  get paymentsNum() {
+    return this.payments.length
+  }
+
 
   // post peers - connect
 

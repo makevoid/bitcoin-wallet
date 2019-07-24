@@ -1,3 +1,33 @@
+// TODO: extract hamlview out into a separate js file
+
+class NullViewObject {}
+
+class HamlView {
+
+  constructor(object = new NullViewObject()) {
+    this.object = object
+    this.initView()
+  }
+
+  initView() {
+    const paymentTplSelector  = ".payment_template"
+    const paymentTplElem      = document.querySelector(paymentTplSelector)
+    const paymentTplHaml      = paymentTplElem.innerHTML
+    const compiledTemplate    = Haml(paymentTplHaml)
+    this.compiledTemplate     = compiledTemplate
+  }
+
+  render() {
+    return this.renderHaml(this.compiledTemplate, this.object)
+  }
+
+  renderHaml(compiledTemplate, object) {
+    return (compiledTemplate)(object)
+  }
+
+}
+
+
 class App {
 
   constructor() {
@@ -40,6 +70,7 @@ class App {
 
     ;(async () => {
       try {
+        // inits the keychain - load the settings for the user node
         await keychain.initLN()
         this.emitAddressEvent()
       } catch (err) {
@@ -52,20 +83,23 @@ class App {
         console.error(err)
       }
 
-      try {
-        await keychain.testSendSimple()
-      } catch (err) {
-        console.error(err)
+
+      // TODO: refactor
+
+      const object = {
+        arrow: "down",
+        amount: new Number(100),
+        invoice: "lnbc123459abcd",
+        // invoice: "lnbc123456789abcdef",
       }
+      this.object = object
 
-      // var main = Haml(main_haml)
+      const html = new HamlView(this.object).render()
+      console.log("HTML:", html)
 
-
-      // try {
-      //   await keychain.testAllGets()
-      // } catch (err) {
-      //   console.error(err)
-      // }
+      const paymentListSelector = ".tx-list.list.payments-list"
+      const paymentListElem = document.querySelector(paymentListSelector)
+      paymentListElem.innerHTML = html
 
       // TODO: remove
       //
@@ -116,6 +150,18 @@ class App {
     await this.loadFX()
   }
 
+
+  get address() {
+    return this.keychain.address
+  }
+
+  genNewAddress() {
+    return this.keychain.getNewAddress()
+  }
+
+
+  // FX methods - TODO: extract
+
   async loadFX() {
     const price = await this.getBTCFx()
     this.rate = price
@@ -146,12 +192,5 @@ class App {
     return resp
   }
 
-  get address() {
-    return this.keychain.address
-  }
-
-  genNewAddress() {
-    return this.keychain.getNewAddress()
-  }
 
 }
