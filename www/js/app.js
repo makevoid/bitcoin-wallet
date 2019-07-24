@@ -71,7 +71,8 @@ class App {
     ;(async () => {
       try {
         // inits the keychain - load the settings for the user node
-        await keychain.initLN()
+        const isInitialized = await keychain.initLNKeychain()
+        console.log("keychain init:", isInitialized)
         this.emitAddressEvent()
       } catch (err) {
         console.error(err)

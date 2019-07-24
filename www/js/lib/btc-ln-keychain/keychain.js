@@ -52,20 +52,22 @@ class Keychain extends LNKeychain {
     this.storeDb[`${this.storeKey}${key}`] = value
   }
 
-  async initLN() {
+  async initLNKeychain() {
     const info = await get("getinfo")
     console.log("info:", info, "\n")
     const { identity_pubkey } = info
     // LN "address" (ID pubkey)
     this.address = identity_pubkey
 
-    let payments = await this.payments()
+    let payments = await this.loadPayments()
     payments = this.filterPayments(payments.payments)
     this.payments = payments
 
     // BTC address
     // const addr = await this.getAddress()
     // this.address = addr.address
+
+    return true
   }
 
   filterPayments(payments) {
@@ -158,7 +160,7 @@ class Keychain extends LNKeychain {
     console.log("invoices:", invoices, "\n")
   }
 
-  async payments() {
+  async loadPayments() {
     let payments = await get("payments")
     payments = payments.payments
     return {
