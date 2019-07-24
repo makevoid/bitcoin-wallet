@@ -4,13 +4,14 @@ class NullViewObject {}
 
 class HamlView {
 
-  constructor(object = new NullViewObject()) {
-    this.object = object
+  constructor(selector, object = new NullViewObject()) {
+    this.selector = selector
+    this.object   = object
     this.initView()
   }
 
   initView() {
-    const paymentTplSelector  = ".payment_template"
+    const paymentTplSelector  = this.selector
     const paymentTplElem      = document.querySelector(paymentTplSelector)
     const paymentTplHaml      = paymentTplElem.innerHTML
     const compiledTemplate    = Haml(paymentTplHaml)
@@ -23,6 +24,54 @@ class HamlView {
 
   renderHaml(compiledTemplate, object) {
     return (compiledTemplate)(object)
+  }
+
+}
+
+class PaymentListViewReset {
+
+  render() {
+    this.resetPaymentListHtml()
+  }
+
+  resetPaymentListHtml() {
+    this.elem.innerHTML = ""
+  }
+
+}
+
+class PaymentListViewRenderer {
+
+  constructor({ elemSelector, html }) {
+    this.elem = document.querySelector(elemSelector)
+    this.html = html
+  }
+
+  render() {
+    this.renderPaymentListHtml()
+  }
+
+  renderPaymentListHtml() {
+    const html = this.elem.innerHTML
+    this.elem.innerHTML = `${html}${this.html}`
+  }
+
+}
+
+class BTCTXListViewRenderer {
+
+  constructor({ elemSelector, html }) {
+    this.elem = document.querySelector(elemSelector)
+    this.html = html
+  }
+
+  render() {
+    this.renderBTCTXListHtml()
+  }
+
+  renderBTCTXListHtml() {
+    const html = this.elem.innerHTML
+    this.elem.innerHTML = `${html}${this.html}`
   }
 
 }
@@ -69,6 +118,7 @@ class App {
     this.keychain = keychain
 
     ;(async () => {
+
       try {
         // inits the keychain - load the settings for the user node
         const isInitialized = await keychain.initLNKeychain()
@@ -84,23 +134,9 @@ class App {
         console.error(err)
       }
 
-
       // TODO: refactor
 
-      const object = {
-        arrow: "down",
-        amount: new Number(100),
-        invoice: "lnbc123459abcd",
-        // invoice: "lnbc123456789abcdef",
-      }
-      this.object = object
-
-      const html = new HamlView(this.object).render()
-      console.log("HTML:", html)
-
-      const paymentListSelector = ".tx-list.list.payments-list"
-      const paymentListElem = document.querySelector(paymentListSelector)
-      paymentListElem.innerHTML = html
+      this.renderPaymentList()
 
       // TODO: remove
       //
@@ -158,6 +194,43 @@ class App {
 
   genNewAddress() {
     return this.keychain.getNewAddress()
+  }
+
+  // LN Payments - Core view methods
+
+  renderViews() {
+    this.renderPaymentList()
+    this.renderBTCTXList()
+  }
+
+  renderBTCTXList(){
+    // TODO: render Transactions (BTC, on chain, non LN transactions)
+  }
+
+  renderPaymentList(){
+    new PaymentListViewReset().render()
+
+    this.keychain.payments.forEach((payment) => {
+      console.log("PAYMENT:", payment)
+
+      const object = {
+        arrow: "down",
+        amount: new Number(100),
+        invoice: "lnbc123459abcd",
+        // invoice: "lnbc123456789abcdef",
+      }
+
+      const didRender = this.renderPayment({ object })
+      console.log("rendered:", didRender)
+    })
+  }
+
+  renderPayment({ object }) {
+    const html = new HamlView(".payment_template", object).render()
+    // console.log("HTML:", html)
+    const paymentListSelector = ".tx-list.list.payments-list"
+    new PaymentListViewRenderer({ elemSelector: paymentListSelector, html }).render()
+    return true
   }
 
 
