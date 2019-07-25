@@ -4,14 +4,24 @@ class NullAddress { }
 class NullHopsNumber { }
 class NullPaymentPreImage { }
 
+class GetCommandNotPresentArgumentError extends Error { }
+class PostCommandNotPresentArgumentError extends Error { }
+class PostRequestArgsNotPresentArgumentError extends Error { }
+
+class InvoiceAmountNotPresentArgumentError extends Error { }
+
+
 // const BTCKeychian = require('@makevoid/bitcoin-keychain')
 
 const get = async (command) => {
+  if (!command) throw new GetCommandNotPresentArgumentError()
   const resp = await lnReq.get(`/v1/${command}`)
   return resp.data
 }
 
 const post = async ({ command, reqArgs }) => {
+  if (!command) throw new PostCommandNotPresentArgumentError()
+  if (!reqArgs) throw new PostRequestArgsNotPresentArgumentError()
   const resp = await lnReq.post(`/v1/${command}`, reqArgs)
   return resp.data
 }
@@ -55,9 +65,26 @@ class Keychain extends LNKeychain {
   async initLNKeychain() {
     const info = await get("getinfo")
     console.log("info:", info, "\n")
-    const { identity_pubkey } = info
+    const {
+      identity_pubkey,
+      block_hash,
+      block_height,
+      synced_to_chain,
+      num_peers,
+      uris,
+    } = info
     // LN "address" (ID pubkey)
-    this.address = identity_pubkey
+    this.address        = identity_pubkey
+    this.identityPubkey = identity_pubkey
+    this.blockHash      = block_hash
+    this.blockHeight    = block_height
+    this.syncedToChain  = synced_to_chain
+    this.numPeers       = num_peers
+
+    const lndUri = uris[0]
+    this.uris = uris
+
+    this.lndUri = lndUri
 
     let payments = await this.loadPayments()
     payments = this.filterPayments(payments.payments)
@@ -130,30 +157,6 @@ class Keychain extends LNKeychain {
     const bal = await this.balance()
     return new Number(bal.balance)
   }
-
-  async sendTx(paymentReq) {
-    const reqArgs = {
-      payment_request: paymentReq,
-    }
-    const resp = await post({
-      command: "channels/transactions",
-      reqArgs
-    })  // todo, refactor deduplicate
-    console.log("resp:", resp, "\n")
-  }
-
-  async sendTxDest(dest, amt) {
-    const reqArgs = {
-      dest: dest,
-      amt: amt,
-    }
-    const resp = await post({
-      command: "channels/transactions",
-      reqArgs
-    })
-    console.log("resp", resp, "\n")
-  }
-
 
   async invoices() {
     const invoices = await get("invoices")
@@ -262,7 +265,7 @@ class Keychain extends LNKeychain {
       command: "channels/transactions",
       txArgs
     })
-    const status   = "paying-invoice"
+    const status = "paying-invoice"
     return { resp, status }
   }
 
@@ -272,7 +275,7 @@ class Keychain extends LNKeychain {
       let { resp, status } = this.sendChannelTransaction({ txArgs })
     } catch (err) {
       if (this.isExpiredError(err)) {
-        let { resp, vstatus } = { vstatus: 'invoice-expired', resp: {} }
+        let { resp, status } = { status: "invoice-expired", resp: {} }
       } else {
         throw err
       }
@@ -305,7 +308,7 @@ class Keychain extends LNKeychain {
     }
 
     if (!payment_route) {
-      status   = "invoice-already-paid"
+      status = "invoice-already-paid"
     } else {
       const { hops } = payment_route
       numHops  = hops.length
@@ -357,10 +360,66 @@ class Keychain extends LNKeychain {
     return this.payments.length
   }
 
+  async postInvoice() {
+    const reqArgs = { amount: 20 }
+    const invoice = await post({ command: "invoices", reqArgs })
+    return invoice
+  }
+
+  async postInvoiceAmount({ amount }) {
+    if (!amount) throw new InvoiceAmountNotPresentArgumentError()
+    const reqArgs = { amount }
+    const invoice = await post({ command: "invoices", reqArgs })
+    return invoice
+  }
+
+  // create a new payment request
+  async paymentRequest() {
+    const newInvoice = await this.postInvoice()
+    console.log("new invoice:", newInvoice)
+    return newInvoice
+  }
+
+  // TODO: finish all payment requests
+
+  // paymentRequestAmount - generates an invoice with a fixed amount
+  async paymentRequestAmount() {
+    const invoiceDetails = { }
+    const newInvoice = await this.postInvoiceAmount({ invoiceDetails })
+    // TODO!!! paymentRequestAmount
+    return "TODO"
+  }
+
+  // amount + memo
+  // async paymentRequestAmtAndReason() {
+
 
   // post peers - connect
 
   // ---------
+
+  // async sendTx(paymentReq) {
+  //   const reqArgs = {
+  //     payment_request: paymentReq,
+  //   }
+  //   const resp = await post({
+  //     command: "channels/transactions",
+  //     reqArgs
+  //   })  // todo, refactor deduplicate
+  //   console.log("resp:", resp, "\n")
+  // }
+  //
+  // async sendTxDest(dest, amt) {
+  //   const reqArgs = {
+  //     dest: dest,
+  //     amt: amt,
+  //   }
+  //   const resp = await post({
+  //     command: "channels/transactions",
+  //     reqArgs
+  //   })
+  //   console.log("resp", resp, "\n")
+  // }
 
   // TODO: remove
   netInfo() {

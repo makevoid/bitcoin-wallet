@@ -105,10 +105,17 @@ Paste
 <div class='s50'></div>
 <div class='receive-screen centered'>
 <ons-list>
-<ons-list-header class='centered nopad bgtheme'>Address</ons-list-header>
+<ons-list-header class='centered nopad bgtheme'>Payment Request</ons-list-header>
 </ons-list>
+<div class='qr-bounding-box bounding-box rel'>
+<div class='abso w-full z1'>
+<div class='text-center centered w20 mt30'>
+<span class='text-red bold upcase text-shadow-white'>NEW Payment <br> Request</span>
+</div>
+</div>
 <div class='qr'>
 <img class='rel' src='assets/img/qr_sample.png'>
+</div>
 </div>
 <div class='s30'></div>
 <ons-list class='w-inner centered'>
@@ -119,7 +126,7 @@ Paste
 </a>
 </div>
 <label class='centered'>
-<ons-input class='receive-address-input nomargin w-full centered text-grey' readonly value='...'></ons-input>
+<ons-input class='receive-payment-input nomargin w-full centered text-grey' readonly value='...'></ons-input>
 </label>
 </ons-list-item>
 </ons-list>
@@ -181,7 +188,7 @@ Transactions
   .left
     %ons-icon.list-item__icon{ icon: "ion-md-arrow-#{arrow}" }
   .center
-    Receiving #{amount} sats - invoice: '#{invoice}'
+    #{actionName} #{amount} sats - invoice: '#{invoice}'
     -#  %span.tx tx: 0xa1f2b1...
 
 

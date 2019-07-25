@@ -46,14 +46,21 @@ class View {
   bindViewUpdatesToEvents() {
     const eventsSelector = "html > body > div.events" // (hidden, empty div)
     const eventsElem = doc.querySelector(eventsSelector)
-    eventsElem.addEventListener('info',     this.updateAddress.bind(this))
-    eventsElem.addEventListener('balance',  this.updateBalance.bind(this))
+    // eventsElem.addEventListener('info',     this.updateInfo.bind(this))
+    eventsElem.addEventListener("balance",  this.updateBalance.bind(this))
+    eventsElem.addEventListener("new-payment-request",  this.showInvoicePaymentRequest.bind(this))
   }
 
-  updateAddress(evt) {
-    const { address } = evt.detail
-    console.log("evt received: ", address)
-    this.receiveInputElem.value = address
+  showInvoicePaymentRequest(evt) {
+    const { paymentRequest } = evt.detail
+    console.log("Received new payment request", paymentRequest)
+    this.receiveInputElem.value = paymentRequest.paymentRequest
+  }
+
+  updateInfo(evt) {
+    // const { ... } = evt.detail
+    // console.log("evt received: ", ..)
+    // TODO: Update blockchain info (block num and hash in an advanced section - for "power users") + chain in sync status (green dot at the corner, or green glow at the bottom + label "BTC-LN NODE IN SYNC")
   }
 
   updateBalance(evt) {
@@ -103,7 +110,7 @@ class View {
 
   defineSelectors() {
     // receive view
-    this.receiveInputElemSel  = ".receive-screen .receive-address-input > input"
+    this.receiveInputElemSel  = ".receive-screen .receive-payment-input > input"
     this.balanceElemSel       = ".balances > .balance > .bal"
     this.balanceFiatElemSel   = ".balances > .balance > .balance-fiat"
     this.refreshBalanceBtnSel = ".balances.list .refresh-balance-btn"

@@ -4,6 +4,51 @@
   box-sizing: border-box;
 } */
 
+
+/* CSS helpers */
+
+.s3, .h3 { height: 3px; }
+.s5, .h5 { height: 5px; }
+.s7, .h7 { height: 7px; }
+.s10, .h10 { height: 10px; }
+.s20, .h20 { height: 20px; }
+.s30, .h30 { height: 30px; }
+.s40, .h40 { height: 40px; }
+.s50, .h50 { height: 50px; }
+.s60, .h60 { height: 60px; }
+.s70, .h70 { height: 70px; }
+.s80, .h80 { height: 80px; }
+.s90, .h90 { height: 90px; }
+.s100, .h100 { height: 100px; }
+
+.w10 { width: 10%; }
+.w20 { width: 20%; }
+.w30 { width: 30%; }
+.w40 { width: 40%; }
+.w50 { width: 50%; }
+.w60 { width: 60%; }
+.w70 { width: 70%; }
+.w80 { width: 80%; }
+.w90 { width: 90%; }
+
+.z0 { z-index: 0; }
+.z1 { z-index: 1; }
+.z2 { z-index: 2; }
+.z3 { z-index: 3; }
+.z4 { z-index: 4; }
+.z5 { z-index: 5; }
+
+.mt10 { margin-top: 10px; }
+.mt20 { margin-top: 20px; }
+.mt30 { margin-top: 30px; }
+.mt40 { margin-top: 40px; }
+.mt50 { margin-top: 50px; }
+.mt60 { margin-top: 60px; }
+.mt70 { margin-top: 70px; }
+.mt80 { margin-top: 80px; }
+.mt90 { margin-top: 90px; }
+.mt100 { margin-top: 100px; }
+
 /* Onsen UI overriders */
 
 /* badges - change the importance of badges (from red to blue) */
@@ -33,26 +78,12 @@
   text-align: center !important;
 }
 
-.s3{ height: 3px; }
-.s5{ height: 5px; }
-.s7{ height: 7px; }
-.s10{ height: 10px; }
-.s20{ height: 20px; }
-.s30{ height: 30px; }
-.s40{ height: 40px; }
-.s50{ height: 50px; }
-.s60{ height: 60px; }
-.s70{ height: 70px; }
-.s80{ height: 80px; }
-.s90{ height: 90px; }
-.s100{ height: 100px; }
-
 .nomargin { margin: 0; }
 .nopad { padding: 0; }
 
 .w-inner { width: 80%; }
 
-.w-full {width: 100%;}
+.w-full { width: 100%; }
 
 .text-grey, .text-grey > input { color: #BBB; }
 
@@ -154,7 +185,11 @@ span.block {
 }
 
 .rel {
-  position: relative
+  position: relative;
+}
+
+.abso {
+  position: absolute;
 }
 
 .upcase {
@@ -177,4 +212,12 @@ span.micro {
 
 .bold {
   font-weight: bold;
+}
+
+.text-red {
+  color: #C22;
+}
+
+.text-shadow-white {
+  text-shadow: 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF, 1px 1px 10px #FFF;
 }

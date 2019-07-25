@@ -10,11 +10,15 @@
 .receive-screen.centered
 
   %ons-list
-    %ons-list-header.centered.nopad.bgtheme Address
+    %ons-list-header.centered.nopad.bgtheme Payment Request
   -# %p.centered Address
 
-  .qr
-    %img.rel{ src: "assets/img/qr_sample.png" }
+  .qr-bounding-box.bounding-box.rel
+    .abso.w-full.z1
+      .text-center.centered.w20.mt30
+        %span.text-red.bold.upcase.text-shadow-white NEW Payment <br> Request
+    .qr
+      %img.rel{ src: "assets/img/qr_sample.png" }
 
   .s30
 
@@ -24,8 +28,8 @@
         %a{ href: "#" }
           %ons-icon.list-item__icon.icon-copy.btn.btn-copy.button-copy{ icon: "ion-md-copy"}
       %label.centered
-        -# .receive-screen .receive-address-input
-        %ons-input.receive-address-input.nomargin.w-full.centered.text-grey{ readonly: true, value: "..." }
+        -# .receive-screen .receive-payment-input
+        %ons-input.receive-payment-input.nomargin.w-full.centered.text-grey{ readonly: true, value: "..." }
 
   .s60
 

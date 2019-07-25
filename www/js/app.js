@@ -2,6 +2,8 @@
 
 class NullViewObject {}
 
+class CantEmitNullPaymentRequestArgumentError extends Error { }
+
 class HamlView {
 
   constructor(selector, object = new NullViewObject()) {
@@ -29,6 +31,10 @@ class HamlView {
 }
 
 class PaymentListViewReset {
+
+  constructor(elemSelector) {
+    this.elem = document.querySelector(elemSelector)
+  }
 
   render() {
     this.resetPaymentListHtml()
@@ -89,6 +95,12 @@ class App {
     this.initKeychain()
   }
 
+  async requestPayment() {
+    const { payment_request } = await this.keychain.paymentRequest()
+    const paymentRequest = { paymentRequest: payment_request }
+    this.emitPaymentRequestGenEvent({ paymentRequest })
+  }
+
   initView() {
     if (this.view) return this.view
     const view = new View()
@@ -134,9 +146,18 @@ class App {
         console.error(err)
       }
 
+
       // TODO: refactor
 
       this.renderPaymentList()
+
+      // TODO: remove!!
+      try {
+        await this.requestPayment()
+      } catch (err) {
+        console.error(err)
+      }
+
 
       // TODO: remove
       //
@@ -151,11 +172,19 @@ class App {
     })
   }
 
+  emitPaymentRequestGenEvent({ paymentRequest }) {
+    if (!paymentRequest) throw new CantEmitNullPaymentRequestArgumentError()
+    const data = {
+      paymentRequest
+    }
+    this.emit({ event: "new-payment-request", data })
+  }
+
   emitAddressEvent() {
     const data = {
       address: this.keychain.address,
     }
-    this.emit({ event: "info", data: data })
+    this.emit({ event: "info", data })
   }
 
   emit({ event, data }) {
@@ -208,21 +237,58 @@ class App {
   }
 
   renderPaymentList(){
-    new PaymentListViewReset().render()
+    const paymentListSelector = ".tx-list.list.payments-list"
+    new PaymentListViewReset(paymentListSelector).render()
 
     this.keychain.payments.forEach((payment) => {
-      console.log("PAYMENT:", payment)
+      const { paymentRequest, value, status } = payment
+      const invoiceShort = this.shortenInvoice({ paymentRequest })
 
       const object = {
-        arrow: "down",
-        amount: new Number(100),
-        invoice: "lnbc123459abcd",
-        // invoice: "lnbc123456789abcdef",
+        arrow:        "down",
+        amount:       value,
+        invoice:      invoiceShort,
+        invoiceFull:  paymentRequest,
+        actionName:   this.actionName({ status }),
       }
+      // console.log("PAYMENT:", payment)
 
-      const didRender = this.renderPayment({ object })
-      console.log("rendered:", didRender)
+      this.renderPayment({ object })
     })
+  }
+
+  // TODO: move in utils
+  shortenInvoice({ paymentRequest }) {
+    const invStart = paymentRequest.slice(0, 11)
+    const invEnd   = paymentRequest.slice(-3)
+    return `${invStart}...${invEnd}`
+  }
+
+  actionName({ status }) {
+    let paymentStatus
+    if (status == "succeeded") {
+      paymentStatus = "Sent"
+    } else {
+      paymentStatus = "Received"
+      // paymentStatus = "Sending"
+      // paymentStatus = "Payment failed for"
+    }
+    return paymentStatus
+
+    // switch (expression) {
+    //   case "succeeded":
+    //
+    //     break;
+    //   case "failed??":
+    //
+    //     break;
+    //   case "??":
+    //
+    //     break;
+    //   default:
+    //     console.error("ACTION NAME NOT IMPLEMENTED")
+    //     "TODO: implement!"
+    // }
   }
 
   renderPayment({ object }) {
@@ -255,7 +321,7 @@ class App {
       // balanceMillis,
     }
 
-    this.emit({ event: "balance", data: data })
+    this.emit({ event: "balance", data })
   }
 
   async getBTCFx() {
